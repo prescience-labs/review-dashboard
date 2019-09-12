@@ -1,0 +1,13 @@
+.emoticon {
+  color: gray;
+}
+
+.emoticon.up.selected,
+.emoticon.up:hover {
+  color: #5ed166;
+}
+
+.emoticon.down.selected,
+.emoticon.down:hover {
+  color: #d15e5e;
+}
