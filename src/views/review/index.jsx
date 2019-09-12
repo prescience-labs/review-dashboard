@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import "./review.css";
 
-export default function ReviewCreation({match}) {
+export default function ReviewCreation({ match }) {
   console.log(match.params.id);
   const [selectedIcon, setSelectedIcon] = useState();
   return (
@@ -44,7 +44,8 @@ export default function ReviewCreation({match}) {
                           </label>
                           <Row style={{ padding: "0.5rem 0 1.5rem 0" }}>
                             <Col>
-                              <a
+                              <span
+                                style={{ cursor: "pointer" }}
                                 onClick={() => setSelectedIcon("down")}
                                 href="#"
                               >
@@ -56,8 +57,12 @@ export default function ReviewCreation({match}) {
                                   size="3x"
                                   style={{ marginRight: "1rem" }}
                                 />
-                              </a>
-                              <a onClick={() => setSelectedIcon("up")} href="#">
+                              </span>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                onClick={() => setSelectedIcon("up")}
+                                href="#"
+                              >
                                 <FontAwesomeIcon
                                   size="3x"
                                   className={`emoticon up ${selectedIcon ===
@@ -65,7 +70,7 @@ export default function ReviewCreation({match}) {
                                   transform="up-2"
                                   icon={faThumbsUp}
                                 />
-                              </a>
+                              </span>
                             </Col>
                           </Row>
                           <label
