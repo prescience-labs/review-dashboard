@@ -10,9 +10,9 @@ export default function CardStats() {
             <Row>
               <div className="col">
                 <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                  Traffic
+                  Overall Review Sentiment
                 </CardTitle>
-                <span className="h2 font-weight-bold mb-0">350,897</span>
+                <span className="h2 font-weight-bold mb-0">85% positive</span>
               </div>
               <Col className="col-auto">
                 <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -35,7 +35,7 @@ export default function CardStats() {
             <Row>
               <div className="col">
                 <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                  New users
+                  Review Invites Sent
                 </CardTitle>
                 <span className="h2 font-weight-bold mb-0">2,356</span>
               </div>
@@ -60,7 +60,7 @@ export default function CardStats() {
             <Row>
               <div className="col">
                 <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                  Sales
+                  Review Invites Opened
                 </CardTitle>
                 <span className="h2 font-weight-bold mb-0">924</span>
               </div>
@@ -85,9 +85,9 @@ export default function CardStats() {
             <Row>
               <div className="col">
                 <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-                  Performance
+                  New Reviews
                 </CardTitle>
-                <span className="h2 font-weight-bold mb-0">49,65%</span>
+                <span className="h2 font-weight-bold mb-0">327</span>
               </div>
               <Col className="col-auto">
                 <div className="icon icon-shape bg-info text-white rounded-circle shadow">
