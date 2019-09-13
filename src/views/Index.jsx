@@ -58,12 +58,66 @@ import {
 } from "variables/charts.jsx";
 
 import Header from "components/Headers/Header.jsx";
-import CardStats from "../components/Cards/CardStats";
+import StatsCard from "../components/StatsCard/StatsCard";
 
 class Index extends React.Component {
   state = {
     activeNav: 1,
-    chartExample1Data: "data1"
+    chartExample1Data: "data1",
+    stats: [
+      {
+        title: 'OVERALL REVIEW SENTIMENT',
+        body: '85% positive',
+        icon: {
+          bgColor: 'bg-danger',
+          name: 'fa-chart-bar'
+        },
+        stats: {
+          positive: true,
+          value: '3.48%',
+          occurrence: 'Since last month'
+        }
+      },
+      {
+        title: 'REVIEW INVITES SENT',
+        body: '2,356',
+        icon: {
+          bgColor: 'bg-warning',
+          name: 'fa-chart-pie'
+        },
+        stats: {
+          positive: false,
+          value: '3.48%',
+          occurrence: 'Since last week'
+        }
+      },
+      {
+        title: 'REVIEW INVITES OPENED',
+        body: '924',
+        icon: {
+          bgColor: 'bg-yellow',
+          name: 'fa-users'
+        },
+        stats: {
+          positive: false,
+          value: '1.10%',
+          occurrence: 'Since yesterday'
+        }
+      },
+      {
+        title: 'NEW REVIEWS',
+        body: '327',
+        icon: {
+          bgColor: 'bg-info',
+          name: 'fa-percent'
+        },
+        stats: {
+          positive: true,
+          value: '12%',
+          occurrence: 'Since last month'
+        }
+      },
+    ]
   };
   toggleNavs = (e, index) => {
     e.preventDefault();
@@ -88,7 +142,13 @@ class Index extends React.Component {
     return (
       <>
         <Header>
-          <CardStats />
+          <Row>
+            {
+              this.state.stats.map((statistics, i) => (
+                <StatsCard {...statistics} key={i}/>
+              ))
+            }
+          </Row>
         </Header>
         {/* Page content */}
         <Container className="mt--7" fluid>
