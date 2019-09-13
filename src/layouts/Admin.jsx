@@ -23,7 +23,11 @@ import { Container } from "reactstrap";
 import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
 import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-
+import Index from "views/Index.jsx";
+import Profile from "views/examples/Profile.jsx";
+import Maps from "views/examples/Maps.jsx";
+import Tables from "views/examples/Tables.jsx";
+import Icons from "views/examples/Icons.jsx";
 import routes from "routes.js";
 
 class Admin extends React.Component {
@@ -76,7 +80,13 @@ class Admin extends React.Component {
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}
           />
-          <Switch>{this.getRoutes(routes)}</Switch>
+          <Switch>
+            <Route path="/admin/index" component={Index} />
+            <Route path="/admin/icons" component={Icons} />
+            <Route path="/admin/maps" component={Maps} />
+            <Route path="/admin/user-profile" component={Profile} />
+            <Route path="/admin/tables" component={Tables} />
+          </Switch>
           <Container fluid>
             <AdminFooter />
           </Container>

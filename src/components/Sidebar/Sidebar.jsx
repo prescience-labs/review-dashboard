@@ -84,7 +84,7 @@ class Sidebar extends React.Component {
       return (
         <NavItem key={key}>
           <NavLink
-            to={prop.layout + prop.path}
+            to={prop.path}
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
@@ -242,26 +242,20 @@ class Sidebar extends React.Component {
             {/* Divider */}
             <hr className="my-3" />
             {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
+            <h6 className="navbar-heading text-muted">Settings</h6>
             {/* Navigation */}
             <Nav className="mb-md-3" navbar>
               <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/overview?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Getting started
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/colors?ref=adr-admin-sidebar">
-                  <i className="ni ni-palette" />
-                  Foundation
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/alerts?ref=adr-admin-sidebar">
-                  <i className="ni ni-ui-04" />
-                  Components
-                </NavLink>
+                <NavItem>
+                  <NavLink tag={Link} to="/admin/user-profile">
+                    <i className="ni ni-single-02" />
+                    User Profile
+                  </NavLink>
+                  <NavLink as={Link} to="/login">
+                    <i className="ni ni-spaceship" />
+                    Log Out
+                  </NavLink>
+                </NavItem>
               </NavItem>
             </Nav>
           </Collapse>

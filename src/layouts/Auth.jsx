@@ -20,11 +20,11 @@ import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
 
+import Register from "views/examples/Register.jsx";
+import Login from "views/examples/Login.jsx";
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
 import AuthFooter from "components/Footers/AuthFooter.jsx";
-
-import routes from "routes.js";
 
 class Auth extends React.Component {
   componentDidMount() {
@@ -86,7 +86,13 @@ class Auth extends React.Component {
           {/* Page content */}
           <Container className="mt--8 pb-5">
             <Row className="justify-content-center">
-              <Switch>{this.getRoutes(routes)}</Switch>
+              <Switch>
+                <div>
+
+                  <Route path="/login" component={Login} />
+                  <Route path="/register" component={Register} />
+                </div>
+              </Switch>
             </Row>
           </Container>
         </div>
