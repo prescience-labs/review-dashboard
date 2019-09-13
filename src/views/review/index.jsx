@@ -17,7 +17,6 @@ import {
 import "./review.css";
 
 export default function ReviewCreation({ match }) {
-  console.log(match.params.id);
   const [selectedIcon, setSelectedIcon] = useState();
   return (
     <>

@@ -23,36 +23,25 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Media,
   NavbarBrand,
   Navbar,
-  NavItem,
-  NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
   Row,
   Col
 } from "reactstrap";
-
-var ps;
+import SidebarItem from "./SidebarItem";
+import UserDropdown from "../UserDropdown";
 
 class Sidebar extends React.Component {
   state = {
@@ -82,17 +71,14 @@ class Sidebar extends React.Component {
   createLinks = routes => {
     return routes.map((prop, key) => {
       return (
-        <NavItem key={key}>
-          <NavLink
-            to={prop.path}
-            tag={NavLinkRRD}
-            onClick={this.closeCollapse}
-            activeClassName="active"
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-        </NavItem>
+        <SidebarItem
+          key={key}
+          path={prop.path}
+          tag={NavLinkRRD}
+          onClick={this.closeCollapse}
+          icon={prop.icon}
+          name={prop.name}
+        />
       );
     });
   };
@@ -104,9 +90,9 @@ class Sidebar extends React.Component {
         to: logo.innerLink,
         tag: Link
       };
-    } else if (logo && logo.outterLink) {
+    } else if (logo && logo.outerLink) {
       navbarBrandProps = {
-        href: logo.outterLink,
+        href: logo.outerLink,
         target: "_blank"
       };
     }
@@ -152,44 +138,7 @@ class Sidebar extends React.Component {
                 <DropdownItem>Something else here</DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <UncontrolledDropdown nav>
-              <DropdownToggle nav>
-                <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={require("assets/img/theme/team-1-800x800.jpg")}
-                    />
-                  </span>
-                </Media>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+            <UserDropdown />
           </Nav>
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
@@ -203,7 +152,7 @@ class Sidebar extends React.Component {
                         <img alt={logo.imgAlt} src={logo.imgSrc} />
                       </Link>
                     ) : (
-                      <a href={logo.outterLink}>
+                      <a href={logo.outerLink}>
                         <img alt={logo.imgAlt} src={logo.imgSrc} />
                       </a>
                     )}
@@ -245,18 +194,18 @@ class Sidebar extends React.Component {
             <h6 className="navbar-heading text-muted">Settings</h6>
             {/* Navigation */}
             <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavItem>
-                  <NavLink tag={Link} to="/admin/user-profile">
-                    <i className="ni ni-single-02" />
-                    User Profile
-                  </NavLink>
-                  <NavLink as={Link} to="/login">
-                    <i className="ni ni-spaceship" />
-                    Log Out
-                  </NavLink>
-                </NavItem>
-              </NavItem>
+              <SidebarItem
+                tag={Link}
+                path="/admin/user-profile"
+                icon="ni ni-single-02"
+                name="User Profile"
+              />
+              <SidebarItem
+                tag={Link}
+                path="/admin/user-profile"
+                icon={"ni ni-spaceship"}
+                name="Log Out"
+              />
             </Nav>
           </Collapse>
         </Container>
@@ -276,9 +225,9 @@ Sidebar.propTypes = {
     // innerLink is for links that will direct the user within the app
     // it will be rendered as <Link to="...">...</Link> tag
     innerLink: PropTypes.string,
-    // outterLink is for links that will direct the user outside the app
+    // outerLink is for links that will direct the user outside the app
     // it will be rendered as simple <a href="...">...</a> tag
-    outterLink: PropTypes.string,
+    outerLink: PropTypes.string,
     // the image src of the logo
     imgSrc: PropTypes.string.isRequired,
     // the alt for the img
