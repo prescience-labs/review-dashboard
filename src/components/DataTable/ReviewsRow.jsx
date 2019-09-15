@@ -13,19 +13,19 @@ import {
 const REVIEW_STATUS = {
   pending: {
     statusIcon: 'bg-warning',
-    displayText: 'Pending'
+    displayText: 'pending'
   },
   completed: {
     statusIcon: 'bg-success',
-    displayText: 'Completed'
+    displayText: 'completed'
   },
   delayed: {
     statusIcon: 'bg-danger',
-    displayText: 'Delayed'
+    displayText: 'delayed'
   },
   schedule: {
     statusIcon: 'bg-info',
-    displayText: 'On Schedule'
+    displayText: 'on schedule'
   },
 }
 

@@ -104,8 +104,8 @@ const storeReviewsTable = {
       store: {
         name: 'Instagram',
         visitors: '3,678',
-        value: 60,
-        progessColor: 'bg-gradient-danger'
+        value: 75,
+        progessColor: 'bg-gradient-info'
       }
     },
     {
@@ -113,7 +113,7 @@ const storeReviewsTable = {
         name: 'Twitter',
         visitors: '2,645',
         value: 30,
-        progessColor: 'bg-gradient-info'
+        progessColor: 'bg-gradient-warning'
       }
     }
   ]
