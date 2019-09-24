@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../components/Headers/Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
   Card,
@@ -14,10 +12,54 @@ import {
   Row,
   Col
 } from "reactstrap";
+import { ClipLoader as Spinner } from "react-spinners";
 import "./review.css";
+import Axios from "axios";
 
 export default function ReviewCreation({ match }) {
-  const [selectedIcon, setSelectedIcon] = useState();
+  const [reviewText, setReviewText] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [transaction, setTransaction] = useState(null);
+  useEffect(() => {
+    console.log(match.params.id);
+    new Promise(async (resolve, reject) => {
+      const { data: transaction } = await Axios.get(
+        `https://data-intel-reviews-dev.herokuapp.com/v1/transactions/${match.params.id}`
+      );
+      setTransaction(transaction);
+      setIsLoading(false);
+    });
+  }, []);
+  if (isLoading) {
+    return (
+      <Row style={{ height: "80vh", verticalAlign: "center" }}>
+        <Col
+          style={{
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column"
+          }}
+        >
+          <div>
+            <Spinner />
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+
+  const handleSubmit = async () => {
+    const review = await Axios.post(
+      `https://data-intel-reviews-dev.herokuapp.com/v1/reviews`,
+      {
+        vendor: transaction.vendor,
+        text: reviewText,
+        transaction: transaction.id,
+        product: transaction.products[0]
+      }
+    );
+  };
   return (
     <>
       <Header />
@@ -38,40 +80,14 @@ export default function ReviewCreation({ match }) {
                     <Row>
                       <Col lg="6">
                         <FormGroup>
-                          <label className="form-control-label">
+                          {/* <label className="form-control-label">
                             Would you recommend this to a friend?
                           </label>
                           <Row style={{ padding: "0.5rem 0 1.5rem 0" }}>
                             <Col>
-                              <span
-                                style={{ cursor: "pointer" }}
-                                onClick={() => setSelectedIcon("down")}
-                                href="#"
-                              >
-                                <FontAwesomeIcon
-                                  icon={faThumbsDown}
-                                  className={`emoticon down ${selectedIcon ===
-                                    "down" && "selected"}`}
-                                  transform="flip-h down-2"
-                                  size="3x"
-                                  style={{ marginRight: "1rem" }}
-                                />
-                              </span>
-                              <span
-                                style={{ cursor: "pointer" }}
-                                onClick={() => setSelectedIcon("up")}
-                                href="#"
-                              >
-                                <FontAwesomeIcon
-                                  size="3x"
-                                  className={`emoticon up ${selectedIcon ===
-                                    "up" && "selected"}`}
-                                  transform="up-2"
-                                  icon={faThumbsUp}
-                                />
-                              </span>
+
                             </Col>
-                          </Row>
+                          </Row> */}
                           <label
                             className="form-control-label"
                             htmlFor="input-review"
@@ -79,10 +95,12 @@ export default function ReviewCreation({ match }) {
                             What did you think about the product?
                           </label>
                           <Input
+                            value={reviewText}
                             className="form-control-alternative"
                             id="input-review"
                             placeholder="Leave your thoughts..."
                             type="textarea"
+                            onChange={e => setReviewText(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
@@ -93,7 +111,7 @@ export default function ReviewCreation({ match }) {
                           className="btn-neutral btn-icon"
                           color="default"
                           href="#pablo"
-                          onClick={e => e.preventDefault()}
+                          onClick={handleSubmit}
                         >
                           <span className="btn-inner--text">Send Review</span>
                         </Button>
