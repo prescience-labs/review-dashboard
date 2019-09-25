@@ -16,7 +16,7 @@ import { ClipLoader as Spinner } from "react-spinners";
 import "./review.css";
 import Axios from "axios";
 
-export default function ReviewCreation({ match }) {
+export default function ReviewCreation({ match, history }) {
   const [reviewText, setReviewText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [transaction, setTransaction] = useState(null);
@@ -54,11 +54,11 @@ export default function ReviewCreation({ match }) {
       `https://data-intel-reviews-dev.herokuapp.com/v1/reviews`,
       {
         vendor: transaction.vendor,
-        text: reviewText,
-        transaction: transaction.id,
-        product: transaction.products[0]
+        text: reviewText
       }
-    );
+    ).then(data => {
+      history.push("/thankyou");
+    });
   };
   return (
     <>

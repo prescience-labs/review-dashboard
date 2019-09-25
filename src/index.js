@@ -27,6 +27,7 @@ import "@fortawesome/fontawesome-free/css/all.css"
 import AdminLayout from "layouts/Admin.jsx";
 import AuthLayout from "layouts/Auth.jsx";
 import ReviewCreation from "./views/review";
+import ThankYou from "./views/ThankYou";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -34,7 +35,10 @@ ReactDOM.render(
       <Route path="/admin" render={props => <AdminLayout {...props} />} />
       <Route path="/auth" render={props => <AuthLayout {...props} />} />
       <Route path="/review/:id" render={props => <ReviewCreation {...props} />} />
+      <Route path="/thankyou" render={props => <ThankYou {...props} />} />
+
       <Redirect from="/" to="/admin/index" />
+
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

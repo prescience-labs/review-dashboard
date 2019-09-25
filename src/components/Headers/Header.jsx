@@ -20,7 +20,7 @@ import React from "react";
 // reactstrap components
 import { Container } from "reactstrap";
 
-export default function Header({ children }) {
+export default function Header({ children = null }) {
   return (
     <>
       <div className="header bg-gradient-success pb-8 pt-5 pt-md-8">
