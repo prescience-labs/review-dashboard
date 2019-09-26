@@ -63,25 +63,28 @@ export function ReviewText(props: IProps) {
     },
     []
   );
-  // console.log(analyzedTerms);
   const { text } = props.review;
   const { markup } = analyzedTerms
-    .sort((a, b) => a.end - b.end)
+    .sort((a, b) => a.start - b.start)
     .reduce(
       (prev, { start, end, score, isAspect }, index, arr) => {
+        // if the cursor is ahead of the start index, and this is the last item in the array, attach the rest of the text
         if (prev.cursor > start && !(index + 1 < arr.length)) {
           return {
             ...prev,
             markup: [...prev.markup, text.slice(prev.cursor, text.length)]
           };
         }
+        // if the cursor is out of bounds or ahead of the start index, move on to the next element
         if (prev.cursor > text.length || prev.cursor > start) {
           return prev;
         }
+        // at this point, we know we need to add the markup between the previous cursor and the start index
         const newMarkup = [
           ...prev.markup,
           <span>{text.slice(prev.cursor, start)}</span>
         ];
+        // the same word can be the subject of multiple analyses. We need to find the longest analysis and use that for our highlighter
         let newCursor = end;
         for (
           let cursorIncrementer = index + 1;
@@ -96,6 +99,7 @@ export function ReviewText(props: IProps) {
             newCursor = arr[cursorIncrementer].end;
           }
         }
+        // once we have the longest word, we can highlight that segment of text
         return {
           markup: [
             ...newMarkup,
@@ -108,7 +112,6 @@ export function ReviewText(props: IProps) {
       },
       { markup: [], cursor: 0 }
     );
-  // console.log(termArray);
 
   return <p>{markup.length > 0 ? markup : text}</p>;
 }
