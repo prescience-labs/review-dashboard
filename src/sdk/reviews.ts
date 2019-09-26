@@ -1,5 +1,31 @@
 import axios from "axios";
 
+export type ScoreTag = "P" | "P+" | "N" | "N+" | "NEU";
+export interface PositionalText {
+  endp: string;
+  inip: string;
+}
+export interface Sentiment {
+  score_tag: ScoreTag;
+  confidence: string;
+}
+export interface SentimentAnalysis extends Sentiment {
+  sentence_list?: Array<Sentence>;
+}
+export interface Sentence extends PositionalText, Sentiment {
+  segment_list?: Array<Segment>;
+}
+export interface Segment extends PositionalText, Sentiment {
+  polarity_term_list?: Array<PolarityTerm>;
+}
+export interface PolarityTerm extends PositionalText, Sentiment {
+  sentimented_concept_list?: Array<SentimentedConcept>;
+}
+export interface SentimentedConcept extends PositionalText, Sentiment {
+  type: string;
+  score_tag: ScoreTag;
+}
+
 const config = {
   baseUrl: process.env.REACT_APP_REVIEW_SERVICE_URL + "/v1",
   resources: {
@@ -70,7 +96,7 @@ export interface IReview {
   rating: number;
   rating_max: number;
   analytics_id: string;
-  sentiment_analysis: object;
+  sentiment_analysis: SentimentAnalysis;
   created_at: string;
   updated_at: string;
   vendor: string;

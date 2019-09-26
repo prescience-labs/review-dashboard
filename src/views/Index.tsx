@@ -55,19 +55,20 @@ import { totalReviewData, totalReviewOptions } from "./charts/totalReviews";
 import DITable from "../components/Table/Table";
 import { Column } from "react-table";
 import { IReview } from "sdk/reviews";
+import { ReviewText } from "components/ReviewText";
 
 declare global {
   interface Window {
     Chart: any;
   }
 }
-const REVIEWS_TO_FETCH = 15
+const REVIEWS_TO_FETCH = 60;
 export interface IState {
   reviews: IReview[];
 }
 export default class Dashboard extends React.Component<{}, IState> {
   state = {
-    reviews: []
+    reviews: [] as IReview[]
   };
   constructor(props: any) {
     super(props);
@@ -110,7 +111,9 @@ export default class Dashboard extends React.Component<{}, IState> {
     return serializedData;
   }
   componentDidMount() {
-    ReviewSdk.getReviews(REVIEWS_TO_FETCH).then(reviews => this.setState({ reviews }));
+    ReviewSdk.getReviews(REVIEWS_TO_FETCH).then(reviews =>
+      this.setState({ reviews })
+    );
   }
   render() {
     const toggleNavs = (e, index) => {
@@ -122,30 +125,25 @@ export default class Dashboard extends React.Component<{}, IState> {
         Header: "Store",
         id: "store",
         Cell: () => (
-            <Media className="align-items-center">
-              <span className="avatar rounded-circle mr-3">
-                <img
-                  alt="..."
-                  src={
-                    "https://www.floydconsultancy.com/wp-content/uploads/2019/04/shopify-logo-600x600.jpg"
-                  }
-                />
-              </span>
-              <span className="mb-0 text-sm">Shopify</span>
-            </Media>
+          <Media className="align-items-center">
+            <span className="avatar rounded-circle mr-3">
+              <img
+                alt="..."
+                src={
+                  "https://www.floydconsultancy.com/wp-content/uploads/2019/04/shopify-logo-600x600.jpg"
+                }
+              />
+            </span>
+            <span className="mb-0 text-sm">Shopify</span>
+          </Media>
         ),
         width: 150
       },
       {
         Header: "Review",
         accessor: "text",
-        Cell: ({ value, columnProps }) => (
-          <span
-            {...columnProps}
-            style={{ wordWrap: "anywhere", whiteSpace: "normal" }}
-          >
-            {value}
-          </span>
+        Cell: ({ value, columnProps, original }) => (
+          <ReviewText review={original}></ReviewText>
         )
       }
     ];
@@ -268,9 +266,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                   </Row>
                 </CardHeader>
                 <DITable columns={columns} data={this.state.reviews} />
-                <CardFooter className="py-4">
-
-                </CardFooter>
+                <CardFooter className="py-4"></CardFooter>
               </Card>
             </Col>
             <Col xl="4">
