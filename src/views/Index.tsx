@@ -75,7 +75,7 @@ class Index extends React.Component {
   componentDidMount() {
     ReviewSdk.getReviews(600).then(data => {
       const dataByMonth = {};
-      data.map(({ sentiment_analysis, created_at }) => {
+      data.forEach(({ sentiment_analysis }) => {
         const m = Math.floor(Math.random() * 12 + 1);
         const month = moment()
           .subtract(m, "months")
@@ -105,12 +105,10 @@ class Index extends React.Component {
 
           return { month: key, percentPositive: pct, total };
         });
-      console.log(serializedData);
       this.setState({ data: serializedData });
     });
   }
   componentWillMount() {
-    // tslint-disable
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
@@ -233,7 +231,7 @@ class Index extends React.Component {
                     </div>
                   </Row>
                 </CardHeader>
-                <DITable />
+                <DITable  />
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination

@@ -29,7 +29,7 @@ export default function ReviewCreation({ match, history }) {
       setTransaction(transaction);
       setIsLoading(false);
     });
-  }, []);
+  }, [match.params.id]);
   if (isLoading) {
     return (
       <Row style={{ height: "80vh", verticalAlign: "center" }}>
@@ -50,13 +50,13 @@ export default function ReviewCreation({ match, history }) {
   }
 
   const handleSubmit = async () => {
-    const review = await Axios.post(
+    await Axios.post(
       `https://data-intel-reviews-dev.herokuapp.com/v1/reviews`,
       {
         vendor: transaction.vendor,
         text: reviewText
       }
-    ).then(data => {
+    ).then(() => {
       history.push("/thankyou");
     });
   };
