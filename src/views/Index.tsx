@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -39,7 +39,8 @@ import {
   PaginationLink,
   CardFooter,
   Row,
-  Col
+  Col,
+  Media
 } from "reactstrap";
 
 // core components
@@ -52,68 +53,103 @@ import { ReviewSdk } from "../sdk";
 import moment from "moment";
 import { totalReviewData, totalReviewOptions } from "./charts/totalReviews";
 import DITable from "../components/Table/Table";
+import { Column } from "react-table";
+import { IReview } from "sdk/reviews";
 
 declare global {
   interface Window {
     Chart: any;
   }
 }
-class Index extends React.Component {
+const REVIEWS_TO_FETCH = 15
+export interface IState {
+  reviews: IReview[];
+}
+export default class Dashboard extends React.Component<{}, IState> {
   state = {
-    activeNav: 1,
-    chartExample1Data: "data1",
-    data: []
+    reviews: []
   };
-  toggleNavs = (e, index) => {
-    e.preventDefault();
-    this.setState({
-      activeNav: index,
-      chartExample1Data:
-        this.state.chartExample1Data === "data1" ? "data2" : "data1"
-    });
-  };
-  componentDidMount() {
-    ReviewSdk.getReviews(600).then(data => {
-      const dataByMonth = {};
-      data.forEach(({ sentiment_analysis }) => {
-        const m = Math.floor(Math.random() * 12 + 1);
-        const month = moment()
-          .subtract(m, "months")
-          .format("MMM 'YY");
-        const [positive, negative] = dataByMonth[month] || [0, 0];
-        if (!sentiment_analysis || !sentiment_analysis.score_tag) {
-          dataByMonth[month] = [positive, negative];
-        }
-        const { score_tag } = sentiment_analysis;
-        if (score_tag && score_tag.indexOf && score_tag.indexOf("P") > -1) {
-          dataByMonth[month] = [positive + 1, negative];
-        } else {
-          dataByMonth[month] = [positive, negative + 1];
-        }
-      });
-      const serializedData = Object.keys(dataByMonth)
-        .sort((_a, _b) => {
-          const a = moment(_a, "MMM 'YY").valueOf();
-          const b = moment(_b, "MMM 'YY").valueOf();
-          return a - b;
-        })
-        .map(key => {
-          const total = dataByMonth[key][0] + dataByMonth[key][1];
-
-          const pct =
-            total === 0 ? 0 : Math.round((dataByMonth[key][0] / total) * 100);
-
-          return { month: key, percentPositive: pct, total };
-        });
-      this.setState({ data: serializedData });
-    });
-  }
-  componentWillMount() {
+  constructor(props: any) {
+    super(props);
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
   }
+  get chartData() {
+    const dataByMonth = {};
+    this.state.reviews.forEach(({ sentiment_analysis }) => {
+      const m = Math.floor(Math.random() * 12 + 1);
+      const month = moment()
+        .subtract(m, "months")
+        .format("MMM 'YY");
+      const [positive, negative] = dataByMonth[month] || [0, 0];
+      if (!sentiment_analysis || !sentiment_analysis.score_tag) {
+        dataByMonth[month] = [positive, negative];
+      }
+      const { score_tag } = sentiment_analysis;
+      if (score_tag && score_tag.indexOf && score_tag.indexOf("P") > -1) {
+        dataByMonth[month] = [positive + 1, negative];
+      } else {
+        dataByMonth[month] = [positive, negative + 1];
+      }
+    });
+    const serializedData = Object.keys(dataByMonth)
+      .sort((_a, _b) => {
+        const a = moment(_a, "MMM 'YY").valueOf();
+        const b = moment(_b, "MMM 'YY").valueOf();
+        return a - b;
+      })
+      .map(key => {
+        const total = dataByMonth[key][0] + dataByMonth[key][1];
+
+        const pct =
+          total === 0 ? 0 : Math.round((dataByMonth[key][0] / total) * 100);
+
+        return { month: key, percentPositive: pct, total };
+      });
+    return serializedData;
+  }
+  componentDidMount() {
+    ReviewSdk.getReviews(REVIEWS_TO_FETCH).then(reviews => this.setState({ reviews }));
+  }
   render() {
+    const toggleNavs = (e, index) => {
+      e.preventDefault();
+    };
+
+    const columns: Column[] = [
+      {
+        Header: "Store",
+        id: "store",
+        Cell: () => (
+            <Media className="align-items-center">
+              <span className="avatar rounded-circle mr-3">
+                <img
+                  alt="..."
+                  src={
+                    "https://www.floydconsultancy.com/wp-content/uploads/2019/04/shopify-logo-600x600.jpg"
+                  }
+                />
+              </span>
+              <span className="mb-0 text-sm">Shopify</span>
+            </Media>
+        ),
+        width: 150
+      },
+      {
+        Header: "Review",
+        accessor: "text",
+        Cell: ({ value, columnProps }) => (
+          <span
+            {...columnProps}
+            style={{ wordWrap: "anywhere", whiteSpace: "normal" }}
+          >
+            {value}
+          </span>
+        )
+      }
+    ];
+
     return (
       <>
         <Header>
@@ -149,10 +185,10 @@ class Index extends React.Component {
                       <Nav className="justify-content-end" pills>
                         <NavItem>
                           <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 1
-                            })}
-                            onClick={e => this.toggleNavs(e, 1)}
+                            // className={classnames("py-2 px-3", {
+                            //   active: this.state.activeNav === 1
+                            // })}
+                            onClick={e => toggleNavs(e, 1)}
                           >
                             <span className="d-none d-md-block">Month</span>
                             <span className="d-md-none">M</span>
@@ -160,12 +196,12 @@ class Index extends React.Component {
                         </NavItem>
                         <NavItem>
                           <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 2
-                            })}
+                            // className={classnames("py-2 px-3", {
+                            //   active: this.state.activeNav === 2
+                            // })}
                             data-toggle="tab"
                             href="#pablo"
-                            onClick={e => this.toggleNavs(e, 2)}
+                            onClick={e => toggleNavs(e, 2)}
                           >
                             <span className="d-none d-md-block">Week</span>
                             <span className="d-md-none">W</span>
@@ -179,7 +215,7 @@ class Index extends React.Component {
                   {/* Chart */}
                   <div className="chart">
                     <Line
-                      data={sentimentData(this.state.data)}
+                      data={sentimentData(this.chartData)}
                       options={sentimentOptions.options}
                       getDatasetAtEvent={e => console.log(e)}
                     />
@@ -203,7 +239,7 @@ class Index extends React.Component {
                   {/* Chart */}
                   <div className="chart">
                     <Bar
-                      data={totalReviewData(this.state.data)}
+                      data={totalReviewData(this.chartData)}
                       options={totalReviewOptions}
                     />
                   </div>
@@ -231,58 +267,9 @@ class Index extends React.Component {
                     </div>
                   </Row>
                 </CardHeader>
-                <DITable  />
+                <DITable columns={columns} data={this.state.reviews} />
                 <CardFooter className="py-4">
-                  <nav aria-label="...">
-                    <Pagination
-                      className="pagination justify-content-end mb-0"
-                      listClassName="justify-content-end mb-0"
-                    >
-                      <PaginationItem className="disabled">
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                          tabIndex={-1}
-                        >
-                          <i className="fas fa-angle-left" />
-                          <span className="sr-only">Previous</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem className="active">
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          2 <span className="sr-only">(current)</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          3
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                        >
-                          <i className="fas fa-angle-right" />
-                          <span className="sr-only">Next</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                    </Pagination>
-                  </nav>
+
                 </CardFooter>
               </Card>
             </Col>
@@ -400,5 +387,3 @@ class Index extends React.Component {
     );
   }
 }
-
-export default Index;
