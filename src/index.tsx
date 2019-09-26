@@ -24,8 +24,8 @@ import "assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/argon-dashboard-react.scss";
 import "@fortawesome/fontawesome-free/css/all.css"
 
-import AdminLayout from "layouts/Admin.jsx";
-import AuthLayout from "layouts/Auth.jsx";
+import AdminLayout from "./layouts/Admin";
+import AuthLayout from "./layouts/Auth";
 import ReviewCreation from "./views/review";
 import ThankYou from "./views/ThankYou";
 
@@ -36,9 +36,7 @@ ReactDOM.render(
       <Route path="/auth" render={props => <AuthLayout {...props} />} />
       <Route path="/review/:id" render={props => <ReviewCreation {...props} />} />
       <Route path="/thankyou" render={props => <ThankYou {...props} />} />
-
       <Redirect from="/" to="/admin/index" />
-
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

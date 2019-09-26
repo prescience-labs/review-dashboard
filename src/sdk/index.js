@@ -1,2 +1,2 @@
-import * as reviews from './reviews'
-export { reviews }
+import * as ReviewSdk from "./reviews";
+export { ReviewSdk };

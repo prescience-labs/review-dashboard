@@ -20,21 +20,22 @@ import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
-import AdminFooter from "components/Footers/AdminFooter.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
-import Index from "views/Index.jsx";
-import Profile from "views/examples/Profile.jsx";
-import Maps from "views/examples/Maps.jsx";
-import Tables from "views/examples/Tables.jsx";
-import Icons from "views/examples/Icons.jsx";
-import routes from "routes.js";
+import AdminNavbar from "../components/Navbars/AdminNavbar";
+import AdminFooter from "../components/Footers/AdminFooter";
+import Sidebar from "../components/Sidebar/Sidebar";
+import Index from "../views/Index";
+import Profile from "../views/examples/Profile";
+import Maps from "../views/examples/Maps";
+import Tables from "../views/examples/Tables";
+import Icons from "../views/examples/Icons";
+import routes from "../routes";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
+    if (!document) return;
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
+    // this.refs.mainContent.scrollTop = 0;
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
