@@ -2,7 +2,7 @@ import React from "react";
 import { IReview, ScoreTag } from "sdk/reviews";
 import color from "color";
 import "./ReviewText.scss";
-
+import * as entitites from "entities";
 interface IProps {
   review: IReview;
 }
@@ -72,7 +72,10 @@ export function ReviewText(props: IProps) {
         if (prev.cursor > start && !(index + 1 < arr.length)) {
           return {
             ...prev,
-            markup: [...prev.markup, text.slice(prev.cursor, text.length)]
+            markup: [
+              ...prev.markup,
+              entitites.decodeHTML(text.slice(prev.cursor, text.length))
+            ]
           };
         }
         // if the cursor is out of bounds or ahead of the start index, move on to the next element
@@ -82,7 +85,7 @@ export function ReviewText(props: IProps) {
         // at this point, we know we need to add the markup between the previous cursor and the start index
         const newMarkup = [
           ...prev.markup,
-          <span>{text.slice(prev.cursor, start)}</span>
+          <span>{entitites.decodeHTML(text.slice(prev.cursor, start))}</span>
         ];
         // the same word can be the subject of multiple analyses. We need to find the longest analysis and use that for our highlighter
         let newCursor = end;
@@ -104,7 +107,7 @@ export function ReviewText(props: IProps) {
           markup: [
             ...newMarkup,
             <SentimentText key={start} sentiment={score} isAspect={isAspect}>
-              {text.slice(start, newCursor + 1)}
+              {entitites.decodeHTML(text.slice(start, newCursor + 1))}
             </SentimentText>
           ],
           cursor: newCursor + 1
