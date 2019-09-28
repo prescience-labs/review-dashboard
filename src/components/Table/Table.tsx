@@ -60,11 +60,16 @@ export default function DITable<T>({
               <span className="sr-only">Previous</span>
             </PaginationLink>
           </PaginationItem>
-          {Array.apply(null, new Array(Math.min(paginationSize, props.pages)))
+          {Array.apply(
+            null,
+            new Array(
+              Math.max(0, Math.min(paginationSize, Math.max(props.pages - 1)))
+            )
+          )
             .reduce((prev, _, i) => [...prev, prev[i] + 1], [
               Math.min(
                 Math.max(props.page - 2, 0),
-                props.pages - 1 - paginationSize
+                Math.max(props.pages - 1 - paginationSize, 0)
               )
             ])
             .map(page => {

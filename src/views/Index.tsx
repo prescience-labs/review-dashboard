@@ -62,7 +62,7 @@ declare global {
     Chart: any;
   }
 }
-const REVIEWS_TO_FETCH = 60;
+const REVIEWS_TO_FETCH = 100;
 export interface IState {
   reviews: IReview[];
 }
