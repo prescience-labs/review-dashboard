@@ -11,17 +11,22 @@ interface IProps<T> {
   columns?: Column[];
   data: T[];
   loading?: boolean;
+  paginationSize?: number;
 }
 
 const CustomHeader = ({ children }) => <th scope="col">{children}</th>;
 
-export default function DITable<T>({ columns = [], data }: IProps<T>) {
+export default function DITable<T>({
+  columns = [],
+  data,
+  paginationSize = 5
+}: IProps<T>) {
   return (
     <RTable
+      resizable={false}
       data={data}
       columns={columns}
       minRows={2}
-      // showPagination={false}
       TableComponent={({ children, ...rest }) => (
         <Table {...rest} className="align-items-center" responsive={true}>
           {children}
@@ -30,11 +35,11 @@ export default function DITable<T>({ columns = [], data }: IProps<T>) {
       pageSize={5}
       TheadComponent={"thead"}
       getTheadProps={() => ({ className: "thead-light" })}
-      // ThComponent={CustomHeader}
-      // TrComponent="tr"
-      // TrGroupComponent={({ children }) => <>{children}</>}
+      ThComponent={CustomHeader}
+      TrComponent="tr"
+      TrGroupComponent={({ children }) => <>{children}</>}
       TbodyComponent="tbody"
-      // TdComponent="td"
+      TdComponent="td"
       PaginationComponent={PaginationComponent}
     />
   );
@@ -55,16 +60,21 @@ export default function DITable<T>({ columns = [], data }: IProps<T>) {
               <span className="sr-only">Previous</span>
             </PaginationLink>
           </PaginationItem>
-          {Array(props.pages)
-            .fill(null)
-            .map((_, i) => {
+          {Array.apply(null, new Array(Math.min(paginationSize, props.pages)))
+            .reduce((prev, _, i) => [...prev, prev[i] + 1], [
+              Math.min(
+                Math.max(props.page - 2, 0),
+                props.pages - 1 - paginationSize
+              )
+            ])
+            .map(page => {
               return (
                 <PaginationItem
-                  className={`${props.page === i ? "active" : ""}`}
-                  onClick={changePage(i)}
+                  className={`${props.page === page ? "active" : ""}`}
+                  onClick={changePage(page)}
                 >
                   <PaginationLink onClick={e => e.preventDefault()}>
-                    {i + 1}
+                    {page + 1}
                   </PaginationLink>
                 </PaginationItem>
               );

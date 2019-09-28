@@ -116,7 +116,7 @@ export function ReviewText(props: IProps) {
       { markup: [], cursor: 0 }
     );
 
-  return <p>{markup.length > 0 ? markup : text}</p>;
+  return <p style={{lineHeight: '2.2rem'}}>{markup.length > 0 ? markup : text}</p>;
 }
 
 function SentimentText({ children, sentiment, isAspect = false }) {
@@ -133,11 +133,15 @@ function SentimentText({ children, sentiment, isAspect = false }) {
   return (
     <span
       style={{
-        backgroundColor,
+        backgroundImage: `linear-gradient(to bottom right, ${color(
+          backgroundColor
+        ).lighten(0.6)}, ${color(backgroundColor).lighten(0.1)})`,
         padding: "0.2rem",
         borderRadius: "0.3rem",
         border: `1px solid ${color(backgroundColor).darken(0.2)}`,
-        color: "white"
+        color: color(backgroundColor)
+          .darken(0.7)
+          .toString()
       }}
     >
       {children}

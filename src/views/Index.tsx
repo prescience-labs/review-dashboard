@@ -136,12 +136,13 @@ export default class Dashboard extends React.Component<{}, IState> {
             </span>
             <span className="mb-0 text-sm">Shopify</span>
           </Media>
-        ),
-        width: 150
+        )
       },
       {
         Header: "Review",
         accessor: "text",
+        width: 800,
+        getProps: () => ({ style: { whiteSpace: "normal" } }),
         Cell: ({ value, columnProps, original }) => (
           <ReviewText review={original}></ReviewText>
         )
@@ -266,7 +267,6 @@ export default class Dashboard extends React.Component<{}, IState> {
                   </Row>
                 </CardHeader>
                 <DITable columns={columns} data={this.state.reviews} />
-                <CardFooter className="py-4"></CardFooter>
               </Card>
             </Col>
             <Col xl="4">
