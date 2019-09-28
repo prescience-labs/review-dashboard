@@ -19,7 +19,8 @@
 import React from "react";
 
 // reactstrap components
-import { Container, Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+import { Row, Col, Nav, NavItem, NavLink } from "reactstrap";
+import { Link } from "react-router-dom";
 
 class Footer extends React.Component {
   render() {
@@ -28,14 +29,14 @@ class Footer extends React.Component {
         <Row className="align-items-center justify-content-xl-between">
           <Col xl="6">
             <div className="copyright text-center text-xl-left text-muted">
-              © 2018{" "}
+              © {new Date().getFullYear()}{" "}
               <a
                 className="font-weight-bold ml-1"
                 href="https://www.creative-tim.com?ref=adr-admin-footer"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Creative Tim
+                Data Intel
               </a>
             </div>
           </Col>
@@ -48,15 +49,15 @@ class Footer extends React.Component {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Creative Tim
+                  Data Intel
                 </NavLink>
               </NavItem>
 
               <NavItem>
                 <NavLink
-                  href="https://www.creative-tim.com/presentation?ref=adr-admin-footer"
+                  as={Link}
+                  to="https://datainte.ai/about"
                   rel="noopener noreferrer"
-                  target="_blank"
                 >
                   About Us
                 </NavLink>
@@ -64,7 +65,7 @@ class Footer extends React.Component {
 
               <NavItem>
                 <NavLink
-                  href="http://blog.creative-tim.com?ref=adr-admin-footer"
+                  href="https://blog.dataintel.ai"
                   rel="noopener noreferrer"
                   target="_blank"
                 >

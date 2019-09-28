@@ -18,7 +18,7 @@
 
 var routes = [
   {
-    path: "/admin/index",
+    path: "/admin/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary"
   },
@@ -31,6 +31,11 @@ var routes = [
     path: "/admin/reviews",
     name: "Reviews",
     icon: "ni ni-bullet-list-67 text-red"
+  },
+  {
+    path: "/admin/campaigns",
+    name: "Campaigns",
+    icon: "ni ni-email-83 text-blue"
   }
 ];
 export default routes;

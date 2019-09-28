@@ -15,9 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect, useState } from "react";
-// node.js library that concatenates classes (strings)
-import classnames from "classnames";
+import React from "react";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
@@ -31,38 +29,40 @@ import {
   NavItem,
   NavLink,
   Nav,
-  Progress,
-  Table,
   Container,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  CardFooter,
   Row,
-  Col,
-  Media
+  Col
 } from "reactstrap";
 
 // core components
 // import { chartExample1, chartExample2 } from "variables/charts.jsx";
-import { chartOptions, parseOptions } from "./charts";
+import { chartOptions, parseOptions } from "../../../variables/charts";
 import Header from "components/Headers/Header.jsx";
-import StatCard from "../components/Cards/StatCard";
-import { sentimentOptions, sentimentData } from "./charts/sentiment";
-import { ReviewSdk } from "../sdk";
+import StatCard from "../../../components/Cards/StatCard";
+import {
+  sentimentOptions,
+  sentimentData
+} from "../../../variables/charts/sentiment";
+import { ReviewSdk } from "../../../sdk";
 import moment from "moment";
-import { totalReviewData, totalReviewOptions } from "./charts/totalReviews";
-import DITable from "../components/Table/Table";
-import { Column } from "react-table";
+import {
+  totalReviewData,
+  totalReviewOptions
+} from "../../../variables/charts/totalReviews";
+import DITable from "../../../components/Table/Table";
 import { IReview } from "sdk/reviews";
-import { ReviewText } from "components/ReviewText";
+import reviewTableColumns from "variables/tables/reviews";
+import {
+  IReviewByStoreColumnShape as IReviewByStoreDataShape,
+  reviewsByStoreColumns
+} from "variables/tables/reviewsByStore";
 
 declare global {
   interface Window {
     Chart: any;
   }
 }
-const REVIEWS_TO_FETCH = 100;
+const REVIEWS_TO_FETCH = 127;
 export interface IState {
   reviews: IReview[];
 }
@@ -75,6 +75,30 @@ export default class Dashboard extends React.Component<{}, IState> {
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
+  }
+  get reviewByStoreData(): IReviewByStoreDataShape[] {
+    const dataKeyedByVendor = this.state.reviews.reduce((prev, review) => {
+      if (!prev[review.vendor]) {
+        prev[review.vendor] = {
+          count: 0,
+          vendor: review.vendor,
+          percent: 0
+        };
+      }
+      prev[review.vendor].count += 1;
+      return prev;
+    }, {});
+    const total = Object.keys(dataKeyedByVendor).reduce(
+      (p, c) => p + dataKeyedByVendor[c].count,
+      0
+    );
+    return Object.keys(dataKeyedByVendor).reduce((prev, curr) => {
+      prev.push({
+        ...dataKeyedByVendor[curr],
+        percent: (dataKeyedByVendor[curr].count / total) * 100
+      });
+      return prev;
+    }, []);
   }
   get chartData() {
     const dataByMonth = {};
@@ -116,45 +140,18 @@ export default class Dashboard extends React.Component<{}, IState> {
     );
   }
   render() {
-    const toggleNavs = (e, index) => {
+    const toggleNavs = (e) => {
       e.preventDefault();
     };
 
-    const columns: Column[] = [
-      {
-        Header: "Store",
-        id: "store",
-        Cell: () => (
-          <Media className="align-items-center">
-            <span className="avatar rounded-circle mr-3">
-              <img
-                alt="..."
-                src={
-                  "https://www.floydconsultancy.com/wp-content/uploads/2019/04/shopify-logo-600x600.jpg"
-                }
-              />
-            </span>
-            <span className="mb-0 text-sm">Shopify</span>
-          </Media>
-        )
-      },
-      {
-        Header: "Review",
-        accessor: "text",
-        width: 800,
-        getProps: () => ({ style: { whiteSpace: "normal" } }),
-        Cell: ({ value, columnProps, original }) => (
-          <ReviewText review={original}></ReviewText>
-        )
-      }
-    ];
-
     return (
       <>
-        <Header>
-          <Row>
+        <Header></Header>
+        {/* Page content */}
+        <Container className="mt--7" fluid>
+          <Row className="mb-5">
             {new Array(4).fill(null).map(() => (
-              <Col lg="6" xl="3">
+              <Col lg="6" xl="3" className="mt-xl--5">
                 <StatCard
                   title="Overall sentiment"
                   statistic="85% positive"
@@ -164,9 +161,6 @@ export default class Dashboard extends React.Component<{}, IState> {
               </Col>
             ))}
           </Row>
-        </Header>
-        {/* Page content */}
-        <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
               <Card className="bg-gradient-default shadow">
@@ -187,7 +181,6 @@ export default class Dashboard extends React.Component<{}, IState> {
                             // className={classnames("py-2 px-3", {
                             //   active: this.state.activeNav === 1
                             // })}
-                            onClick={e => toggleNavs(e, 1)}
                           >
                             <span className="d-none d-md-block">Month</span>
                             <span className="d-md-none">M</span>
@@ -200,7 +193,6 @@ export default class Dashboard extends React.Component<{}, IState> {
                             // })}
                             data-toggle="tab"
                             href="#pablo"
-                            onClick={e => toggleNavs(e, 2)}
                           >
                             <span className="d-none d-md-block">Week</span>
                             <span className="d-md-none">W</span>
@@ -215,7 +207,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                   <div className="chart">
                     <Line
                       data={sentimentData(this.chartData)}
-                      options={sentimentOptions.options}
+                      options={sentimentOptions}
                       getDatasetAtEvent={e => console.log(e)}
                     />
                   </div>
@@ -266,7 +258,10 @@ export default class Dashboard extends React.Component<{}, IState> {
                     </div>
                   </Row>
                 </CardHeader>
-                <DITable columns={columns} data={this.state.reviews} />
+                <DITable
+                  columns={reviewTableColumns}
+                  data={this.state.reviews}
+                />
               </Card>
             </Col>
             <Col xl="4">
@@ -276,105 +271,13 @@ export default class Dashboard extends React.Component<{}, IState> {
                     <div className="col">
                       <h3 className="mb-0">Reviews by Store</h3>
                     </div>
-                    <div className="col text-right">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        See all
-                      </Button>
-                    </div>
                   </Row>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Referral</th>
-                      <th scope="col">Visitors</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Facebook</th>
-                      <td>1,480</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">60%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="60"
-                              barClassName="bg-gradient-danger"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Facebook</th>
-                      <td>5,480</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">70%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="70"
-                              barClassName="bg-gradient-success"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Google</th>
-                      <td>4,807</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">80%</span>
-                          <div>
-                            <Progress max="100" value="80" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Instagram</th>
-                      <td>3,678</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">75%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="75"
-                              barClassName="bg-gradient-info"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">twitter</th>
-                      <td>2,645</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">30%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="30"
-                              barClassName="bg-gradient-warning"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
+                <DITable<IReviewByStoreDataShape>
+                  data={this.reviewByStoreData}
+                  columns={reviewsByStoreColumns}
+                  showPagination={false}
+                />
               </Card>
             </Col>
           </Row>

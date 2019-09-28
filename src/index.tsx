@@ -27,7 +27,7 @@ import "@fortawesome/fontawesome-free/css/all.css"
 
 import AdminLayout from "./layouts/Admin";
 import AuthLayout from "./layouts/Auth";
-import ReviewCreation from "./views/review";
+import ReviewCreation from "./views/publicCreateReview";
 import ThankYou from "./views/ThankYou";
 
 ReactDOM.render(

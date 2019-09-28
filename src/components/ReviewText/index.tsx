@@ -116,7 +116,9 @@ export function ReviewText(props: IProps) {
       { markup: [], cursor: 0 }
     );
 
-  return <p style={{lineHeight: '2.2rem'}}>{markup.length > 0 ? markup : text}</p>;
+  return (
+    <p style={{ lineHeight: "2.2rem" }}>{markup.length > 0 ? markup : text}</p>
+  );
 }
 
 function SentimentText({ children, sentiment, isAspect = false }) {
@@ -135,10 +137,14 @@ function SentimentText({ children, sentiment, isAspect = false }) {
       style={{
         backgroundImage: `linear-gradient(to bottom right, ${color(
           backgroundColor
-        ).lighten(0.6)}, ${color(backgroundColor).lighten(0.1)})`,
+        ).lighten(0.6)}, ${color(backgroundColor)
+          .lighten(0.1)
+          .opaquer(-0.8)})`,
         padding: "0.2rem",
         borderRadius: "0.3rem",
-        border: `1px solid ${color(backgroundColor).darken(0.2)}`,
+        border: `1px solid ${color(backgroundColor)
+          .darken(0.2)
+          .opaquer(-0.8)}`,
         color: color(backgroundColor)
           .darken(0.7)
           .toString()
@@ -148,213 +154,3 @@ function SentimentText({ children, sentiment, isAspect = false }) {
     </span>
   );
 }
-
-// sentence_list -> segment_list -> [ polarity_term_list -> sentimented_concept_list ]
-const sample = {
-  irony: "NONIRONIC",
-  model: "general_en",
-  agreement: "DISAGREEMENT",
-  score_tag: "P",
-  confidence: "86",
-  subjectivity: "SUBJECTIVE",
-  sentence_list: [
-    {
-      bop: "y",
-      endp: "40",
-      inip: "0",
-      text: "These socks are comfortable and fit well.",
-      agreement: "AGREEMENT",
-      score_tag: "P",
-      confidence: "100",
-      segment_list: [
-        {
-          endp: "26",
-          inip: "0",
-          text: "These socks are comfortable",
-          agreement: "AGREEMENT",
-          score_tag: "P",
-          confidence: "100",
-          segment_type: "main",
-          polarity_term_list: [
-            {
-              endp: "26",
-              inip: "16",
-              text: "comfortable",
-              score_tag: "P",
-              confidence: "100",
-              sentimented_concept_list: [
-                {
-                  id: "fd4e787c79",
-                  endp: "10",
-                  form: "sock",
-                  inip: "6",
-                  type: "Top>Product>Textile>Clothes",
-                  variant: "socks",
-                  score_tag: "P"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          endp: "39",
-          inip: "32",
-          text: "fit well",
-          agreement: "AGREEMENT",
-          score_tag: "P",
-          confidence: "100",
-          segment_type: "main",
-          polarity_term_list: [
-            {
-              endp: "39",
-              inip: "36",
-              text: "well",
-              score_tag: "P",
-              confidence: "100"
-            }
-          ]
-        }
-      ],
-      sentimented_entity_list: [],
-      sentimented_concept_list: [
-        {
-          id: "fd4e787c79",
-          form: "sock",
-          type: "Top>Product>Textile>Clothes",
-          score_tag: "P"
-        }
-      ]
-    },
-    {
-      bop: "n",
-      endp: "131",
-      inip: "41",
-      text:
-        "However, they are rather on the thin side, so I'm not sure how well they will wear or last.",
-      agreement: "AGREEMENT",
-      score_tag: "N",
-      confidence: "92",
-      segment_list: [
-        {
-          endp: "48",
-          inip: "41",
-          text: "However,",
-          agreement: "AGREEMENT",
-          score_tag: "NONE",
-          confidence: "100",
-          segment_type: "secondary",
-          polarity_term_list: []
-        },
-        {
-          endp: "81",
-          inip: "50",
-          text: "they are rather on the thin side",
-          agreement: "AGREEMENT",
-          score_tag: "NONE",
-          confidence: "100",
-          segment_type: "main",
-          polarity_term_list: [],
-          sentimented_concept_list: [
-            {
-              id: "43f84b54ed",
-              endp: "81",
-              form: "side",
-              inip: "78",
-              type: "Top>Organization",
-              variant: "side",
-              score_tag: "NONE"
-            },
-            {
-              id: "a23b3d2a83",
-              endp: "81",
-              form: "side",
-              inip: "78",
-              type: "Top>Location",
-              variant: "side",
-              score_tag: "NONE"
-            }
-          ]
-        },
-        {
-          endp: "122",
-          inip: "84",
-          text: "so I'm not sure how well they will wear",
-          agreement: "AGREEMENT",
-          score_tag: "N",
-          confidence: "92",
-          segment_list: [
-            {
-              endp: "107",
-              inip: "84",
-              text: "so I'm not sure how well",
-              agreement: "AGREEMENT",
-              score_tag: "N",
-              confidence: "92",
-              segment_type: "main",
-              polarity_term_list: [
-                {
-                  endp: "107",
-                  inip: "104",
-                  text: "('m not) well",
-                  score_tag: "N",
-                  confidence: "92"
-                }
-              ]
-            }
-          ],
-          segment_type: "main",
-          polarity_term_list: [
-            {
-              endp: "107",
-              inip: "104",
-              text: "('m not) well",
-              score_tag: "N",
-              confidence: "92"
-            }
-          ]
-        },
-        {
-          endp: "130",
-          inip: "127",
-          text: "last",
-          agreement: "AGREEMENT",
-          score_tag: "NONE",
-          confidence: "100",
-          segment_type: "secondary",
-          polarity_term_list: []
-        }
-      ],
-      sentimented_entity_list: [],
-      sentimented_concept_list: [
-        {
-          id: "43f84b54ed",
-          form: "side",
-          type: "Top>Organization",
-          score_tag: "NONE"
-        },
-        {
-          id: "a23b3d2a83",
-          form: "side",
-          type: "Top>Location",
-          score_tag: "NONE"
-        }
-      ]
-    }
-  ],
-  sentimented_entity_list: [],
-  sentimented_concept_list: [
-    {
-      id: "43f84b54ed",
-      form: "side",
-      type: "Top>Organization",
-      score_tag: "NONE"
-    },
-    { id: "a23b3d2a83", form: "side", type: "Top>Location", score_tag: "NONE" },
-    {
-      id: "fd4e787c79",
-      form: "sock",
-      type: "Top>Product>Textile>Clothes",
-      score_tag: "P"
-    }
-  ]
-};

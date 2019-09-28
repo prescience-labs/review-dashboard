@@ -16,19 +16,22 @@
 
 */
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import AdminFooter from "../components/Footers/AdminFooter";
 import Sidebar from "../components/Sidebar/Sidebar";
-import Index from "../views/Index";
+import Index from "../views/admin/Dashboard";
 import Profile from "../views/examples/Profile";
 import Maps from "../views/examples/Maps";
 import Tables from "../views/examples/Tables";
 import Icons from "../views/examples/Icons";
 import routes from "../routes";
+import Reviews from "views/admin/Reviews";
+import Campaigns from "views/admin/Campaigns";
+import Insights from "views/admin/Insights";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -59,7 +62,7 @@ class Admin extends React.Component {
           {...this.props}
           routes={routes}
           logo={{
-            innerLink: "/admin/index",
+            innerLink: "/admin/dashboard",
             imgSrc: require("assets/img/brand/data-intel.png"),
             imgAlt: "..."
           }}
@@ -67,11 +70,18 @@ class Admin extends React.Component {
         <div className="main-content" ref="mainContent">
           <AdminNavbar {...this.props} />
           <Switch>
-            <Route path="/admin/index" component={Index} />
+            <Route path="/admin/dashboard" component={Index} />
             <Route path="/admin/icons" component={Icons} />
             <Route path="/admin/maps" component={Maps} />
             <Route path="/admin/user-profile" component={Profile} />
+            <Route path="/admin/insights" component={Insights} />
+            <Route path="/admin/reviews" component={Reviews} />
             <Route path="/admin/tables" component={Tables} />
+            <Route path="/admin/campaigns" component={Campaigns} />
+            <Route
+              path=""
+              component={() => <Redirect to="/admin/dashboard" />}
+            />
           </Switch>
           <Container fluid>
             <AdminFooter />
