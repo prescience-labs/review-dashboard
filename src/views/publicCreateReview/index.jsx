@@ -105,7 +105,7 @@ export default function ReviewCreation({ match, history }) {
                               fullSymbol={
                                 <i
                                   style={{
-                                    color: "#fadc00",
+                                    color: "#22F9C7",
                                     fontSize: "2.5rem"
                                   }}
                                   className="fas fa-star"
@@ -114,7 +114,7 @@ export default function ReviewCreation({ match, history }) {
                               emptySymbol={
                                 <i
                                   style={{
-                                    color: "#fadc00",
+                                    color: "#22F9C7",
                                     fontSize: "2.5rem"
                                   }}
                                   className="far fa-star"
@@ -126,9 +126,10 @@ export default function ReviewCreation({ match, history }) {
                             className="form-control-label"
                             htmlFor="input-review"
                           >
-                            What did you think about the product?
+                            What do you think about the product?
                           </label>
                           <Input
+                            style={{ minHeight: "15rem" }}
                             value={reviewText}
                             className="form-control-alternative"
                             id="input-review"

@@ -174,7 +174,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                 </Row>
                 <Row>
                   <Col className="mb-5 mb-xl-0" xl="8">
-                    <Card className="bg-gradient-default shadow">
+                    <Card className="bg-gradient-dark shadow">
                       <CardHeader className="bg-transparent">
                         <Row className="align-items-center">
                           <div className="col">
