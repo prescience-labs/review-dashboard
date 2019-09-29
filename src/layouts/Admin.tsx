@@ -32,8 +32,12 @@ import routes from "../routes";
 import Reviews from "views/admin/Reviews";
 import Campaigns from "views/admin/Campaigns";
 import Insights from "views/admin/Insights";
+import { ReviewProvider } from "state/reviews";
 
 class Admin extends React.Component {
+  state = {
+    reviews: undefined
+  };
   componentDidUpdate(e) {
     if (!document) return;
     document.documentElement.scrollTop = 0;
@@ -69,20 +73,27 @@ class Admin extends React.Component {
         />
         <div className="main-content" ref="mainContent">
           <AdminNavbar {...this.props} />
-          <Switch>
-            <Route path="/admin/dashboard" component={Index} />
-            <Route path="/admin/icons" component={Icons} />
-            <Route path="/admin/maps" component={Maps} />
-            <Route path="/admin/user-profile" component={Profile} />
-            <Route path="/admin/insights" component={Insights} />
-            <Route path="/admin/reviews" component={Reviews} />
-            <Route path="/admin/tables" component={Tables} />
-            <Route path="/admin/campaigns" component={Campaigns} />
-            <Route
-              path=""
-              component={() => <Redirect to="/admin/dashboard" />}
-            />
-          </Switch>
+          <ReviewProvider
+            value={{
+              reviews: this.state.reviews,
+              setReviews: reviews => this.setState({ reviews })
+            }}
+          >
+            <Switch>
+              <Route path="/admin/dashboard" component={Index} />
+              <Route path="/admin/icons" component={Icons} />
+              <Route path="/admin/maps" component={Maps} />
+              <Route path="/admin/user-profile" component={Profile} />
+              <Route path="/admin/insights" component={Insights} />
+              <Route path="/admin/reviews" component={Reviews} />
+              <Route path="/admin/tables" component={Tables} />
+              <Route path="/admin/campaigns" component={Campaigns} />
+              <Route
+                path=""
+                component={() => <Redirect to="/admin/dashboard" />}
+              />
+            </Switch>
+          </ReviewProvider>
           <Container fluid>
             <AdminFooter />
           </Container>
