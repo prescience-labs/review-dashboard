@@ -15,11 +15,15 @@ import {
 import { ClipLoader as Spinner } from "react-spinners";
 import "./review.css";
 import Axios from "axios";
+import ReactRating from "react-rating";
 
 export default function ReviewCreation({ match, history }) {
+  const ratingMin = 0;
+  const ratingMax = 5;
   const [reviewText, setReviewText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [transaction, setTransaction] = useState(null);
+  const [rating, setRating] = useState(0);
   useEffect(() => {
     console.log(match.params.id);
     new Promise(async (resolve, reject) => {
@@ -54,7 +58,9 @@ export default function ReviewCreation({ match, history }) {
       `https://data-intel-reviews-dev.herokuapp.com/v1/reviews`,
       {
         vendor: transaction.vendor,
-        text: reviewText
+        text: reviewText,
+        rating_max: ratingMax,
+        rating
       }
     ).then(() => {
       history.push("/thankyou");
@@ -63,7 +69,7 @@ export default function ReviewCreation({ match, history }) {
   return (
     <>
       <Header />
-      <Container className="mt--7" fluid>
+      <Container className="mt--9" fluid>
         <Row>
           <Col>
             <Card className="bg-secondary shadow" fluid>
@@ -88,6 +94,34 @@ export default function ReviewCreation({ match, history }) {
 
                             </Col>
                           </Row> */}
+                          <div>
+                            <ReactRating
+                              start={ratingMin}
+                              stop={ratingMax}
+                              style={{ marginBottom: 20 }}
+                              onChange={selectedRating =>
+                                setRating(selectedRating)
+                              }
+                              fullSymbol={
+                                <i
+                                  style={{
+                                    color: "#fadc00",
+                                    fontSize: "2.5rem"
+                                  }}
+                                  className="fas fa-star"
+                                ></i>
+                              }
+                              emptySymbol={
+                                <i
+                                  style={{
+                                    color: "#fadc00",
+                                    fontSize: "2.5rem"
+                                  }}
+                                  className="far fa-star"
+                                ></i>
+                              }
+                            ></ReactRating>
+                          </div>
                           <label
                             className="form-control-label"
                             htmlFor="input-review"
