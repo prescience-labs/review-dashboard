@@ -16,7 +16,9 @@ type ScoredWord = {
 
 export function ReviewText(props: IProps) {
   const { sentiment_analysis } = props.review;
-
+  if (!sentiment_analysis || !sentiment_analysis.sentence_list) {
+    return <p>{entitites.decodeHTML(props.review.text)}</p>;
+  }
   const analyzedTerms = sentiment_analysis.sentence_list.reduce<ScoredWord[]>(
     (accumulatedSentences, sentence) => {
       return [

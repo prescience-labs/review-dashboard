@@ -3,10 +3,7 @@ import Header from "components/Headers/Header";
 import DITable from "components/Table/Table";
 import reviewTableColumns from "variables/tables/reviews";
 import { Card, CardHeader, CardFooter, Container, Col, Row } from "reactstrap";
-import { ReviewSdk } from "sdk";
-import { ReviewContext, ReviewProvider, ReviewConsumer } from "state/reviews";
-
-const REVIEWS_TO_FETCH = 1000;
+import { ReviewContext, ReviewConsumer } from "state/reviews";
 
 export default function Reviews() {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +11,7 @@ export default function Reviews() {
   useEffect(() => {
     if (!reviewContext.reviews) {
       setIsLoading(true);
-      ReviewSdk.getReviews(REVIEWS_TO_FETCH).then(reviews => {
+      reviewContext.getReviews().then(reviews => {
         reviewContext.setReviews(reviews);
         setIsLoading(false);
       });

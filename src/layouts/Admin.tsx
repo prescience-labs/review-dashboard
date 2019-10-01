@@ -33,6 +33,9 @@ import Reviews from "views/admin/Reviews";
 import Campaigns from "views/admin/Campaigns";
 import Insights from "views/admin/Insights";
 import { ReviewProvider } from "state/reviews";
+import { ReviewSdk } from "sdk";
+
+const REVIEWS_TO_FETCH = 127;
 
 class Admin extends React.Component {
   state = {
@@ -76,7 +79,8 @@ class Admin extends React.Component {
           <ReviewProvider
             value={{
               reviews: this.state.reviews,
-              setReviews: reviews => this.setState({ reviews })
+              setReviews: reviews => this.setState({ reviews }),
+              getReviews: () => ReviewSdk.getReviews(REVIEWS_TO_FETCH)
             }}
           >
             <Switch>

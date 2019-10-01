@@ -31,7 +31,8 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col,
+  Collapse
 } from "reactstrap";
 
 // core components
@@ -63,7 +64,6 @@ declare global {
     Chart: any;
   }
 }
-const REVIEWS_TO_FETCH = 127;
 export interface IState {
   reviews: IReview[];
 }
@@ -106,24 +106,27 @@ export default class Dashboard extends React.Component<{}, IState> {
   }
   get chartData() {
     const dataByMonth = {};
-    ((this.context && this.context.reviews) || []).forEach(
-      ({ sentiment_analysis }) => {
-        const m = Math.floor(Math.random() * 12 + 1);
-        const month = moment()
-          .subtract(m, "months")
-          .format("MMM 'YY");
-        const [positive, negative] = dataByMonth[month] || [0, 0];
-        if (!sentiment_analysis || !sentiment_analysis.score_tag) {
-          dataByMonth[month] = [positive, negative];
-        }
-        const { score_tag } = sentiment_analysis;
-        if (score_tag && score_tag.indexOf && score_tag.indexOf("P") > -1) {
-          dataByMonth[month] = [positive + 1, negative];
-        } else {
-          dataByMonth[month] = [positive, negative + 1];
-        }
+    ((this.context && this.context.reviews) || []).forEach(review => {
+      const { sentiment_analysis } = review;
+      console.log(sentiment_analysis);
+      if (!sentiment_analysis) {
+        return;
       }
-    );
+      const m = Math.floor(Math.random() * 12 + 1);
+      const month = moment()
+        .subtract(m, "months")
+        .format("MMM 'YY");
+      const [positive, negative] = dataByMonth[month] || [0, 0];
+      if (!sentiment_analysis || !sentiment_analysis.score_tag) {
+        dataByMonth[month] = [positive, negative];
+      }
+      const { score_tag } = sentiment_analysis;
+      if (score_tag && score_tag.indexOf && score_tag.indexOf("P") > -1) {
+        dataByMonth[month] = [positive + 1, negative];
+      } else {
+        dataByMonth[month] = [positive, negative + 1];
+      }
+    });
     const serializedData = Object.keys(dataByMonth)
       .sort((_a, _b) => {
         const a = moment(_a, "MMM 'YY").valueOf();
@@ -142,9 +145,10 @@ export default class Dashboard extends React.Component<{}, IState> {
   }
   componentDidMount() {
     if (this.context && !this.context.reviews && this.context.setReviews) {
-      ReviewSdk.getReviews(REVIEWS_TO_FETCH).then(reviews =>
-        this.context.setReviews(reviews)
-      );
+      this.context.getReviews &&
+        this.context
+          .getReviews()
+          .then(reviews => this.context.setReviews(reviews));
     }
   }
   render() {
@@ -185,7 +189,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                               Review Sentiment Trend
                             </h2>
                           </div>
-                          <div className="col">
+                          {/* <div className="col">
                             <Nav className="justify-content-end" pills>
                               <NavItem>
                                 <NavLink
@@ -214,7 +218,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                                 </NavLink>
                               </NavItem>
                             </Nav>
-                          </div>
+                          </div> */}
                         </Row>
                       </CardHeader>
                       <CardBody>
@@ -276,6 +280,7 @@ export default class Dashboard extends React.Component<{}, IState> {
                       <DITable
                         columns={reviewTableColumns}
                         data={(this.context && this.context.reviews) || []}
+            
                       />
                     </Card>
                   </Col>

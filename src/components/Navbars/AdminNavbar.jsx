@@ -18,12 +18,6 @@
 import React from "react";
 // reactstrap components
 import {
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container
@@ -36,7 +30,8 @@ class AdminNavbar extends React.Component {
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
           <Container fluid>
-            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+            {/* SEARCH BAR */}
+            {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
               <FormGroup className="mb-0">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -47,8 +42,8 @@ class AdminNavbar extends React.Component {
                   <Input placeholder="Search" type="text" />
                 </InputGroup>
               </FormGroup>
-            </Form>
-            <Nav className="align-items-center d-none d-md-flex" navbar>
+            </Form> */}
+            <Nav className="align-items-center d-none d-md-flex mr-3 d-none d-md-flex ml-lg-auto" navbar>
               <UserDropdown />
             </Nav>
           </Container>
