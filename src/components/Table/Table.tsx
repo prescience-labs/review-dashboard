@@ -1,8 +1,8 @@
 import React from "react";
-import { Table, Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import { Table } from "reactstrap";
 import PaginationComponent from "./components/Pagination";
 
-import RTable, { Column, ComponentProps, TableProps } from "react-table";
+import RTable, { Column, TableProps } from "react-table";
 export interface IHeader {
   title?: string;
   cell?: string;

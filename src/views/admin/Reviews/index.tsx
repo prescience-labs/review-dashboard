@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Header from "components/Headers/Header";
 import DITable from "components/Table/Table";
 import reviewTableColumns from "variables/tables/reviews";
-import { Card, CardHeader, CardFooter, Container, Col, Row } from "reactstrap";
+import { Card, CardHeader, Container, Col, Row } from "reactstrap";
 import { ReviewContext, ReviewConsumer } from "state/reviews";
 
 export default function Reviews() {
@@ -16,7 +16,7 @@ export default function Reviews() {
         setIsLoading(false);
       });
     }
-  }, []);
+  }, [reviewContext]);
   return (
     <ReviewConsumer>
       {value => (

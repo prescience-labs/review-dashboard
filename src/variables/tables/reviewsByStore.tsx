@@ -23,7 +23,6 @@ export const reviewsByStoreColumns: Column[] = [
   },
   {
     Cell: ({ original, index, ...rest }) => {
-      console.log(rest, "rest");
       return (
         <div className="d-flex align-items-center">
           <span className="mr-2">{`${original.percent}%`}</span>

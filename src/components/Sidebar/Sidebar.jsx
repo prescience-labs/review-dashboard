@@ -202,8 +202,14 @@ class Sidebar extends React.Component {
               />
               <SidebarItem
                 tag={Link}
-                path="/admin/user-profile"
+                path="/admin/data-management"
                 icon={"ni ni-spaceship"}
+                name="Import/Export Data"
+              />
+              <SidebarItem
+                tag={Link}
+                path="/admin/user-profile"
+                icon={"ni ni-key-25"}
                 name="Log Out"
               />
             </Nav>

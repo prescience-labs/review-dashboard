@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { Column } from "react-table";
 import { ReviewText } from "components/ReviewText";
-import {
-  Media,
-  Collapse,
-  Button,
-  UncontrolledCollapse,
-  Container
-} from "reactstrap";
+import { Media, Collapse } from "reactstrap";
 
 const reviewTableColumns = [
   {
