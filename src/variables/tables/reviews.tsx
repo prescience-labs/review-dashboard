@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { Column } from "react-table";
 import { ReviewText } from "components/ReviewText";
-import {
-  Media,
-  Collapse,
-  Button,
-  UncontrolledCollapse,
-  Container
-} from "reactstrap";
+import { Media, Collapse } from "reactstrap";
 
 const reviewTableColumns = [
   {
@@ -48,16 +42,16 @@ const reviewTableColumns = [
               <ReviewText review={original}></ReviewText>
             </div>
           </Collapse>
-          <a
-            data-toggle="collapse"
-            href="#collapse"
+          <p
+            dpta-toggle="collapse"
             role="button"
+            style={{ color: "rgb(6, 213, 232)", cursor: "pointer" }}
             aria-expanded="false"
             onClick={() => setIsOpen(!isOpen)}
             id={`toggler-${original.id}`}
           >
             Show {isOpen ? "Less" : "More"}
-          </a>
+          </p>
         </>
       );
     }
