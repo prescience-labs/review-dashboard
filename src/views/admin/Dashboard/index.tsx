@@ -26,13 +26,9 @@ import {
   Card,
   CardHeader,
   CardBody,
-  NavItem,
-  NavLink,
-  Nav,
   Container,
   Row,
-  Col,
-  Collapse
+  Col
 } from "reactstrap";
 
 // core components
@@ -44,7 +40,6 @@ import {
   sentimentOptions,
   sentimentData
 } from "../../../variables/charts/sentiment";
-import { ReviewSdk } from "../../../sdk";
 import moment from "moment";
 import {
   totalReviewData,
@@ -108,7 +103,6 @@ export default class Dashboard extends React.Component<{}, IState> {
     const dataByMonth = {};
     ((this.context && this.context.reviews) || []).forEach(review => {
       const { sentiment_analysis } = review;
-      console.log(sentiment_analysis);
       if (!sentiment_analysis) {
         return;
       }
@@ -152,10 +146,6 @@ export default class Dashboard extends React.Component<{}, IState> {
     }
   }
   render() {
-    const toggleNavs = e => {
-      e.preventDefault();
-    };
-
     return (
       <>
         <ReviewConsumer>
@@ -280,7 +270,6 @@ export default class Dashboard extends React.Component<{}, IState> {
                       <DITable
                         columns={reviewTableColumns}
                         data={(this.context && this.context.reviews) || []}
-            
                       />
                     </Card>
                   </Col>

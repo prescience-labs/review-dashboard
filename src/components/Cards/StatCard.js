@@ -38,7 +38,7 @@ StatCard.propTypes = {
   delta: propTypes.number.isRequired,
   deltaTimeUnit: propTypes.string.isRequired,
   statistic: propTypes.string.isRequired,
-  color: propTypes.oneOf("warning", "danger", "yellow", "info")
+  color: propTypes.oneOf(["warning", "danger", "yellow", "info"])
 };
 
 StatCard.defaultProps = {
