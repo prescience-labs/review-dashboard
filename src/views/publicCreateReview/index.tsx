@@ -58,7 +58,7 @@ export default function ReviewCreation({ match, history }) {
     await Axios.post(`${config.integrationsUrl}/proxy/reviews/`, {
       vendor: transaction.vendor,
       transaction: transaction.id,
-      product: transaction.product[0],
+      product: transaction.products[0],
       text: reviewText,
       rating_max: ratingMax,
       rating
