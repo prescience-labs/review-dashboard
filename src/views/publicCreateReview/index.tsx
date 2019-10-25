@@ -18,6 +18,7 @@ import Axios from "axios";
 import ReactRater from "react-rater";
 import Star from "./Star";
 import "react-rater/lib/react-rater.css";
+import { config } from "sdk/reviews";
 
 export default function ReviewCreation({ match, history }) {
   const ratingMax = 5;
@@ -28,7 +29,7 @@ export default function ReviewCreation({ match, history }) {
   useEffect(() => {
     new Promise(async (resolve, reject) => {
       const { data: transaction } = await Axios.get(
-        `https://data-intel-reviews-dev.herokuapp.com/v1/transactions/${match.params.id}`
+        `${config.integrationsUrl}/proxy/transactions/${match.params.id}`
       );
       setTransaction(transaction);
       setIsLoading(false);
@@ -54,15 +55,12 @@ export default function ReviewCreation({ match, history }) {
   }
 
   const handleSubmit = async () => {
-    await Axios.post(
-      `https://data-intel-reviews-dev.herokuapp.com/v1/reviews`,
-      {
-        vendor: transaction.vendor,
-        text: reviewText,
-        rating_max: ratingMax,
-        rating
-      }
-    ).then(() => {
+    await Axios.post(`${config.integrationsUrl}/proxy/reviews/`, {
+      vendor: transaction.vendor,
+      text: reviewText,
+      rating_max: ratingMax,
+      rating
+    }).then(() => {
       history.push("/thankyou");
     });
   };

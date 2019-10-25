@@ -25,11 +25,11 @@ export const reviewsByStoreColumns: Column[] = [
     Cell: ({ original, index, ...rest }) => {
       return (
         <div className="d-flex align-items-center">
-          <span className="mr-2">{`${original.percent}%`}</span>
+          <span className="mr-2">{`${Math.round(original.percent)}%`}</span>
           <div>
             <Progress
               max="100"
-              value={`${original.percent}`}
+              value={`${Math.round(original.percent)}`}
               color={colors[colors.length % (index + 1)]}
             />
           </div>

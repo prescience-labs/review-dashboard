@@ -26,8 +26,9 @@ export interface SentimentedConcept extends PositionalText, Sentiment {
   score_tag: ScoreTag;
 }
 
-const config = {
+export const config = {
   baseUrl: process.env.REACT_APP_REVIEW_SERVICE_URL + "/v1",
+  integrationsUrl: process.env.REACT_APP_REVIEW_PROXY,
   resources: {
     products: {
       path: "/products"
