@@ -83,7 +83,7 @@ class Admin extends React.Component {
               getReviews: () => ReviewSdk.getReviews(REVIEWS_TO_FETCH)
             }}
           >
-            <Switch>
+            <Switch >
               <Route path="/admin/dashboard" component={Index} />
               <Route path="/admin/icons" component={Icons} />
               <Route path="/admin/maps" component={Maps} />

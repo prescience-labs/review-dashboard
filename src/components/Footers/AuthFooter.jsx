@@ -30,27 +30,24 @@ class Login extends React.Component {
             <Row className="align-items-center justify-content-xl-between">
               <Col xl="6">
                 <div className="copyright text-center text-xl-left text-muted">
-                  © 2018{" "}
+                  © {new Date().getFullYear()}{" "}
                   <a
                     className="font-weight-bold ml-1"
-                    href="https://www.creative-tim.com?ref=adr-auth-footer"
+                    href="https://dataintel.ai"
                     target="_blank"
                   >
-                    Creative Tim
+                    Data Intel
                   </a>
                 </div>
               </Col>
               <Col xl="6">
                 <Nav className="nav-footer justify-content-center justify-content-xl-end">
                   <NavItem>
-                    <NavLink
-                      href="https://www.creative-tim.com?ref=adr-auth-footer"
-                      target="_blank"
-                    >
-                      Creative Tim
+                    <NavLink href="https://dataintel.ai" target="_blank">
+                      Data Intel
                     </NavLink>
                   </NavItem>
-                  <NavItem>
+                  {/* <NavItem>
                     <NavLink
                       href="https://www.creative-tim.com/presentation?ref=adr-auth-footer"
                       target="_blank"
@@ -73,7 +70,7 @@ class Login extends React.Component {
                     >
                       MIT License
                     </NavLink>
-                  </NavItem>
+                  </NavItem> */}
                 </Nav>
               </Col>
             </Row>

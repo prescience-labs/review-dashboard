@@ -39,7 +39,7 @@ class Register extends React.Component {
       <>
         <Col lg="6" md="8">
           <Card className="bg-secondary shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
+            {/* <CardHeader className="bg-transparent pb-5">
               <div className="text-muted text-center mt-2 mb-4">
                 <small>Sign up with</small>
               </div>
@@ -73,11 +73,11 @@ class Register extends React.Component {
                   <span className="btn-inner--text">Google</span>
                 </Button>
               </div>
-            </CardHeader>
+            </CardHeader> */}
             <CardBody className="px-lg-5 py-lg-5">
-              <div className="text-center text-muted mb-4">
+              {/* <div className="text-center text-muted mb-4">
                 <small>Or sign up with credentials</small>
-              </div>
+              </div> */}
               <Form role="form">
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -109,15 +109,15 @@ class Register extends React.Component {
                     <Input placeholder="Password" type="password" />
                   </InputGroup>
                 </FormGroup>
-                <div className="text-muted font-italic">
+                {/* <div className="text-muted font-italic">
                   <small>
                     password strength:{" "}
                     <span className="text-success font-weight-700">strong</span>
                   </small>
-                </div>
+                </div> */}
                 <Row className="my-4">
                   <Col xs="12">
-                    <div className="custom-control custom-control-alternative custom-checkbox">
+                    {/* <div className="custom-control custom-control-alternative custom-checkbox">
                       <input
                         className="custom-control-input"
                         id="customCheckRegister"
@@ -134,7 +134,7 @@ class Register extends React.Component {
                           </a>
                         </span>
                       </label>
-                    </div>
+                    </div> */}
                   </Col>
                 </Row>
                 <div className="text-center">

@@ -1,4 +1,5 @@
 import axios from "axios";
+import config from "config/config";
 
 export type ScoreTag = "P" | "P+" | "N" | "N+" | "NEU";
 export interface PositionalText {
@@ -26,8 +27,8 @@ export interface SentimentedConcept extends PositionalText, Sentiment {
   score_tag: ScoreTag;
 }
 
-const config = {
-  baseUrl: process.env.REACT_APP_REVIEW_SERVICE_URL + "/v1",
+const reviewsConfig = {
+  baseUrl: config.api.reviewBaseUrl + "/v1",
   resources: {
     products: {
       path: "/products"
@@ -45,7 +46,7 @@ const config = {
 };
 
 const instance = axios.create({
-  baseURL: config.baseUrl
+  baseURL: reviewsConfig.baseUrl
 });
 
 /**
@@ -55,7 +56,7 @@ const instance = axios.create({
  */
 export const getProducts = async (limit = 50, offset = 0) => {
   return await instance.get(
-    `${config.resources.products.path}?limit=${limit}&offset=${offset}`
+    `${reviewsConfig.resources.products.path}?limit=${limit}&offset=${offset}`
   );
 };
 
@@ -64,7 +65,7 @@ export const getProducts = async (limit = 50, offset = 0) => {
  * @param {uuid} id
  */
 export const getProductById = async id => {
-  return await instance.get(`${config.resources.products.path}/${id}`);
+  return await instance.get(`${reviewsConfig.resources.products.path}/${id}`);
 };
 
 /**
@@ -108,7 +109,7 @@ export const getReviews = async (
   before = undefined,
   after = undefined
 ): Promise<IReview[]> => {
-  let requestUrl = `${config.resources.reviews.path}?limit=${limit}&offset=${offset}`;
+  let requestUrl = `${reviewsConfig.resources.reviews.path}?limit=${limit}&offset=${offset}`;
   requestUrl += searchText ? `&text=${searchText}` : "";
   requestUrl += before ? `&before=${before}` : "";
   requestUrl += after ? `&after=${after}` : "";
@@ -121,7 +122,7 @@ export const getReviews = async (
  * @param {uuid} id
  */
 export const getReviewById = async id => {
-  return await instance.get(`${config.resources.reviews.path}/${id}`);
+  return await instance.get(`${reviewsConfig.resources.reviews.path}/${id}`);
 };
 
 /**
@@ -131,7 +132,7 @@ export const getReviewById = async id => {
  */
 export const getTransactions = async (limit = 50, offset = 0) => {
   return await instance.get(
-    `${config.resources.transactions.path}?limit=${limit}&offset=${offset}`
+    `${reviewsConfig.resources.transactions.path}?limit=${limit}&offset=${offset}`
   );
 };
 
@@ -140,7 +141,9 @@ export const getTransactions = async (limit = 50, offset = 0) => {
  * @param {uuid} id
  */
 export const getTransactionById = async id => {
-  return await instance.get(`${config.resources.transactions.path}/${id}`);
+  return await instance.get(
+    `${reviewsConfig.resources.transactions.path}/${id}`
+  );
 };
 
 /**
@@ -150,7 +153,7 @@ export const getTransactionById = async id => {
  */
 export const getVendors = async (limit = 50, offset = 0) => {
   return await instance.get(
-    `${config.resources.vendors.path}?limit=${limit}&offset=${offset}`
+    `${reviewsConfig.resources.vendors.path}?limit=${limit}&offset=${offset}`
   );
 };
 
@@ -159,5 +162,5 @@ export const getVendors = async (limit = 50, offset = 0) => {
  * @param {uuid} id
  */
 export const getVendorById = async id => {
-  return await instance.get(`${config.resources.vendors.path}/${id}`);
+  return await instance.get(`${reviewsConfig.resources.vendors.path}/${id}`);
 };

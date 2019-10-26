@@ -20,11 +20,13 @@ import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
 
-import Register from "views/examples/Register.jsx";
-import Login from "views/examples/Login.jsx";
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
 import AuthFooter from "components/Footers/AuthFooter.jsx";
+
+import Login from "views/auth/Login";
+import Register from "views/auth/Register";
+import AuthCallback from "views/auth/Callback";
 
 class Auth extends React.Component {
   componentDidMount() {
@@ -33,21 +35,6 @@ class Auth extends React.Component {
   componentWillUnmount() {
     document.body.classList.remove("bg-default");
   }
-  getRoutes = routes => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
   render() {
     return (
       <>
@@ -60,8 +47,7 @@ class Auth extends React.Component {
                   <Col lg="5" md="6">
                     <h1 className="text-white">Welcome!</h1>
                     <p className="text-lead text-light">
-                      Use these awesome forms to login or create new account in
-                      your project for free.
+                      Log in to an existing account.
                     </p>
                   </Col>
                 </Row>
@@ -87,11 +73,8 @@ class Auth extends React.Component {
           <Container className="mt--8 pb-5">
             <Row className="justify-content-center">
               <Switch>
-                <div>
-
-                  <Route path="/login" component={Login} />
-                  <Route path="/register" component={Register} />
-                </div>
+                <Route path="/auth/login" component={Login} />
+                <Route path="/auth/register" component={Register} />
               </Switch>
             </Row>
           </Container>
