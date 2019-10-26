@@ -107,8 +107,8 @@ export default class Dashboard extends React.Component<{}, IState> {
         return;
       }
       const m = Math.floor(Math.random() * 12 + 1);
-      const month = moment()
-        .subtract(m, "months")
+      const month = moment(review.created_at)
+        // .subtract(m, "months")
         .format("MMM 'YY");
       const [positive, negative] = dataByMonth[month] || [0, 0];
       if (!sentiment_analysis || !sentiment_analysis.score_tag) {
