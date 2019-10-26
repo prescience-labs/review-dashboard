@@ -29,6 +29,11 @@ interface ILoginParameters {
   email: string;
   password: string;
 }
+
+export const getToken = () => {
+  return localStorage.getItem(TOKEN_STORAGE_KEY);
+};
+
 export const login = async ({ email, password }: ILoginParameters) => {
   const config = {
     headers: {

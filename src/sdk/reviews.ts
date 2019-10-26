@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "config/config";
+import { getToken } from "./user";
 
 export type ScoreTag = "P" | "P+" | "N" | "N+" | "NEU";
 export interface PositionalText {
@@ -28,8 +29,19 @@ export interface SentimentedConcept extends PositionalText, Sentiment {
 }
 
 const instance = axios.create({
-  baseURL: config.baseUrl
+  baseURL: config.baseUrl,
 });
+
+instance.interceptors.request.use(
+  config => ({
+    ...config,
+    headers: {
+      ...config.headers,
+      Authorization: `Bearer ${getToken()}`
+    }
+  }),
+  config => config
+);
 
 /**
  * Returns a paginated list of all products.
@@ -123,9 +135,7 @@ export const getTransactions = async (limit = 50, offset = 0) => {
  * @param {uuid} id
  */
 export const getTransactionById = async id => {
-  return await instance.get(
-    `${config.resources.transactions.path}/${id}`
-  );
+  return await instance.get(`${config.resources.transactions.path}/${id}`);
 };
 
 /**
