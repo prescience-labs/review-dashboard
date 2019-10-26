@@ -11,8 +11,8 @@ export default function Reviews() {
   useEffect(() => {
     if (!reviewContext.reviews) {
       setIsLoading(true);
-      reviewContext.getReviews().then(reviews => {
-        reviewContext.setReviews(reviews);
+      reviewContext.getReviews().then(data => {
+        reviewContext.setReviews(data.results);
         setIsLoading(false);
       });
     }

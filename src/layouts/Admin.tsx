@@ -35,7 +35,7 @@ import Insights from "views/admin/Insights";
 import { ReviewProvider } from "state/reviews";
 import { ReviewSdk } from "sdk";
 
-const REVIEWS_TO_FETCH = 127;
+const REVIEWS_TO_FETCH = 500;
 
 class Admin extends React.Component {
   state = {
@@ -80,10 +80,11 @@ class Admin extends React.Component {
             value={{
               reviews: this.state.reviews,
               setReviews: reviews => this.setState({ reviews }),
-              getReviews: () => ReviewSdk.getReviews(REVIEWS_TO_FETCH)
+              getReviews: () =>
+                ReviewSdk.getReviews({ limit: REVIEWS_TO_FETCH })
             }}
           >
-            <Switch >
+            <Switch>
               <Route path="/admin/dashboard" component={Index} />
               <Route path="/admin/icons" component={Icons} />
               <Route path="/admin/maps" component={Maps} />

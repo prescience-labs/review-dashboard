@@ -1,19 +1,19 @@
 import React from "react";
-import { IReview } from "sdk/reviews";
+import { IReview, IApiResponse } from "sdk/reviews";
 import { ReviewSdk } from "sdk";
 
 interface IReviewContext {
   reviews?: IReview[];
   setReviews: (reviews: IReview[]) => void;
-  getReviews: () => Promise<IReview[]>;
+  getReviews: () => Promise<IApiResponse<IReview[]>>;
 }
 
-const REVIEWS_TO_FETCH = 127;
+const REVIEWS_TO_FETCH = 500;
 
 export const ReviewContext = React.createContext<IReviewContext>({
   reviews: undefined,
   setReviews: reviews => {},
-  getReviews: () => ReviewSdk.getReviews(REVIEWS_TO_FETCH)
+  getReviews: () => ReviewSdk.getReviews({ limit: REVIEWS_TO_FETCH })
 });
 
 export const ReviewProvider = ReviewContext.Provider;

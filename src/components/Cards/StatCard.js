@@ -4,29 +4,48 @@ import { Card, CardBody, Row, CardTitle, Col } from "reactstrap";
 
 export default function StatCard(props) {
   return (
-    <Card className="card-stats mb-4 mb-xl-0">
+    <Card className="card-stats mb-4 mb-xl-0" style={{ height: 140 }}>
       <CardBody>
-        <Row>
-          <div className="col">
-            <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
-              {props.title}
-            </CardTitle>
-            <span className="h2 font-weight-bold mb-0">{props.statistic}</span>
-          </div>
-          <Col className="col-auto">
-            <div
-              className={`icon icon-shape bg-${props.color} text-white rounded-circle shadow`}
-            >
-              {props.children}
-            </div>
-          </Col>
-        </Row>
-        <p className="mt-3 mb-0 text-muted text-sm">
-          <span className="text-success mr-2">
-            <i className="fa fa-arrow-up" /> {props.delta}
-          </span>{" "}
-          <span className="text-nowrap">{props.deltaTimeUnit}</span>
-        </p>
+        {props.loading ? (
+          <span>Loading...</span>
+        ) : (
+          <>
+            <Row>
+              <div className="col">
+                <CardTitle tag="h5" className="text-uppercase text-muted mb-0">
+                  {props.title}
+                </CardTitle>
+                <span className="h2 font-weight-bold mb-0">
+                  {props.statistic}
+                </span>
+              </div>
+              <Col className="col-auto">
+                <div
+                  className={`icon icon-shape bg-${props.color} text-white rounded-circle shadow`}
+                >
+                  {props.children}
+                </div>
+              </Col>
+            </Row>
+            <p className="mt-3 mb-0 text-muted text-sm">
+              <span
+                className={`text-${
+                  props.isPositive ? "success" : "warning"
+                } mr-2`}
+              >
+                {props.isPositive !== undefined ? (
+                  <i
+                    className={`fa fa-arrow-${
+                      props.isPositive ? "up" : "down"
+                    }`}
+                  />
+                ) : null}{" "}
+                {props.delta}
+              </span>{" "}
+              <span className="text-nowrap">{props.caption}</span>
+            </p>
+          </>
+        )}
       </CardBody>
     </Card>
   );
@@ -35,9 +54,11 @@ export default function StatCard(props) {
 StatCard.propTypes = {
   title: propTypes.string.isRequired,
   children: propTypes.node.isRequired,
-  delta: propTypes.number.isRequired,
-  deltaTimeUnit: propTypes.string.isRequired,
+  delta: propTypes.oneOfType([propTypes.number, propTypes.string]),
+  caption: propTypes.string.isRequired,
+  isPositive: propTypes.bool,
   statistic: propTypes.string.isRequired,
+  loading: propTypes.bool,
   color: propTypes.oneOf(["warning", "danger", "yellow", "info"])
 };
 
@@ -45,7 +66,7 @@ StatCard.defaultProps = {
   title: "",
   children: <span />,
   deltaTimeUnit: "Since last month",
-  delta: 0,
   statistic: "Please provide a statistic",
-  color: "warning"
+  color: "warning",
+  isPositive: undefined
 };

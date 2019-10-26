@@ -46,13 +46,14 @@ import {
   totalReviewOptions
 } from "../../../variables/charts/totalReviews";
 import DITable from "../../../components/Table/Table";
-import { IReview } from "sdk/reviews";
+import { IReview, getReviews } from "sdk/reviews";
 import reviewTableColumns from "variables/tables/reviews";
 import {
   IReviewByStoreColumnShape as IReviewByStoreDataShape,
   reviewsByStoreColumns
 } from "variables/tables/reviewsByStore";
 import { ReviewContext, ReviewConsumer } from "state/reviews";
+import { Link } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -61,10 +62,16 @@ declare global {
 }
 export interface IState {
   reviews: IReview[];
+  last30: number | null;
+  last60: number | null;
+  sentiment: number | null;
 }
 export default class Dashboard extends React.Component<{}, IState> {
   state = {
-    reviews: [] as IReview[]
+    reviews: [] as IReview[],
+    last30: null,
+    last60: null,
+    sentiment: null
   };
   constructor(props: any) {
     super(props);
@@ -72,6 +79,7 @@ export default class Dashboard extends React.Component<{}, IState> {
       parseOptions(Chart, chartOptions());
     }
   }
+
   get reviewByStoreData(): IReviewByStoreDataShape[] {
     const dataKeyedByVendor = (
       (this.context && this.context.reviews) ||
@@ -99,39 +107,39 @@ export default class Dashboard extends React.Component<{}, IState> {
       return prev;
     }, []);
   }
-  get chartData() {
+  get reviewsByMonth() {
     const dataByMonth = {};
     ((this.context && this.context.reviews) || []).forEach(review => {
       const { sentiment_analysis } = review;
       if (!sentiment_analysis) {
         return;
       }
-      const m = Math.floor(Math.random() * 12 + 1);
       const month = moment(review.created_at)
         // .subtract(m, "months")
         .format("MMM 'YY");
       const [positive, negative] = dataByMonth[month] || [0, 0];
-      if (!sentiment_analysis || !sentiment_analysis.score_tag) {
+      if (!sentiment_analysis || !sentiment_analysis.score) {
         dataByMonth[month] = [positive, negative];
       }
-      const { score_tag } = sentiment_analysis;
-      if (score_tag && score_tag.indexOf && score_tag.indexOf("P") > -1) {
-        dataByMonth[month] = [positive + 1, negative];
-      } else {
-        dataByMonth[month] = [positive, negative + 1];
-      }
+      const { score } = sentiment_analysis;
+      dataByMonth[month] =
+        score > 0 ? [positive + 1, negative] : [positive, negative + 1];
     });
-    const serializedData = Object.keys(dataByMonth)
+    return dataByMonth;
+  }
+  get chartData() {
+    const reviewsByMonth = this.reviewsByMonth;
+    const serializedData = Object.keys(this.reviewsByMonth)
       .sort((_a, _b) => {
         const a = moment(_a, "MMM 'YY").valueOf();
         const b = moment(_b, "MMM 'YY").valueOf();
         return a - b;
       })
       .map(key => {
-        const total = dataByMonth[key][0] + dataByMonth[key][1];
-
+        const total = reviewsByMonth[key][0] + reviewsByMonth[key][1];
+        debugger;
         const pct =
-          total === 0 ? 0 : Math.round((dataByMonth[key][0] / total) * 100);
+          total === 0 ? 0 : Math.round((reviewsByMonth[key][0] / total) * 100);
 
         return { month: key, percentPositive: pct, total };
       });
@@ -142,10 +150,47 @@ export default class Dashboard extends React.Component<{}, IState> {
       this.context.getReviews &&
         this.context
           .getReviews()
-          .then(reviews => this.context.setReviews(reviews));
+          .then(reviews => this.context.setReviews(reviews.results));
+    }
+    getReviews({
+      after: moment()
+        .subtract(30, "days")
+        .format("YYYY-MM-DD")
+    }).then(data => this.setState({ last30: data.count }));
+    getReviews({
+      after: moment()
+        .subtract(60, "days")
+        .format("YYYY-MM-DD")
+    }).then(data => this.setState({ last60: data.count }));
+  }
+
+  formatNumber(number: number) {
+    return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  }
+  getSentimentHumanScore(polarity: number) {
+    if (polarity > 0.8) {
+      return "Very Positive";
+    } else if (polarity > 0.6) {
+      return "Mostly Positive";
+    } else if (polarity > 0.2) {
+      return "Somewhat Positive";
+    } else if (polarity > 0) {
+      return "Neutral";
+    } else if (polarity > -0.4) {
+      return "Somewhat Negative";
+    } else {
+      return "Mostly Negative";
     }
   }
   render() {
+    const { last30, last60 } = this.state;
+    const avgSentiment =
+      this.context.reviews &&
+      this.context.reviews
+        .map(r => (r.sentiment_analysis ? r.sentiment_analysis.score : 0))
+        .reduce((prev, value) => prev + value, 0) / this.context.reviews.length;
+
+    console.log(last30, last60);
     return (
       <>
         <ReviewConsumer>
@@ -155,16 +200,55 @@ export default class Dashboard extends React.Component<{}, IState> {
               {/* Page content */}
               <Container className="mt--7" fluid>
                 <Row className="mb-5">
-                  {new Array(4).fill(null).map(() => (
-                    <Col lg="6" xl="3" className="mt-xl--5">
-                      <StatCard
-                        title="Overall sentiment"
-                        statistic="85% positive"
-                        delta={3.01}
-                        deltaTimeUnit="Since last month"
-                      />
-                    </Col>
-                  ))}
+                  <Col lg="6" xl="3" className="mt-xl--5">
+                    <StatCard
+                      title="Reviews in last 30 days"
+                      statistic={last30 ? this.formatNumber(last30) : ""}
+                      delta={this.formatNumber(last30 - (last60 - last30))}
+                      loading={last60 === null || last30 === null}
+                      caption="Since last month"
+                      isPositive={last30 - last60 >= 0}
+                    >
+                      <i className="fas fa-star" />
+                    </StatCard>
+                  </Col>
+                  <Col lg="6" xl="3" className="mt-xl--5">
+                    <StatCard
+                      title="Overall sentiment"
+                      statistic={`${(((avgSentiment + 1) / 2) * 100).toFixed(
+                        0
+                      )}%`}
+                      isPositive={avgSentiment >= 0}
+                      color="danger"
+                      caption={this.getSentimentHumanScore(avgSentiment)}
+                    >
+                      <i className="fas fa-check" />
+                    </StatCard>
+                  </Col>
+                  <Col lg="6" xl="3" className="mt-xl--5">
+                    <StatCard
+                      title="Total Orders"
+                      statistic="2,191"
+                      delta={129}
+                      color="info"
+                      isPositive={true}
+                      caption="Since last month"
+                    >
+                      <i className="fas fa-box" />
+                    </StatCard>
+                  </Col>
+                  <Col lg="6" xl="3" className="mt-xl--5">
+                    <StatCard
+                      title="Response Rate"
+                      statistic="2%"
+                      delta={1.1}
+                      color="yellow"
+                      isPositive={true}
+                      caption="Since last month"
+                    >
+                      <i className="fas fa-comments" />
+                    </StatCard>
+                  </Col>
                 </Row>
                 <Row>
                   <Col className="mb-5 mb-xl-0" xl="8">
@@ -256,14 +340,11 @@ export default class Dashboard extends React.Component<{}, IState> {
                             <h3 className="mb-0">Latest Reviews</h3>
                           </div>
                           <div className="col text-right">
-                            <Button
-                              color="primary"
-                              href="#pablo"
-                              onClick={e => e.preventDefault()}
-                              size="sm"
-                            >
-                              See all
-                            </Button>
+                            <Link to="/admin/reviews">
+                              <Button color="primary" size="sm">
+                                See all
+                              </Button>
+                            </Link>
                           </div>
                         </Row>
                       </CardHeader>

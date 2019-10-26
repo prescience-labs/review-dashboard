@@ -2,7 +2,6 @@ import config from "config/config";
 import axios from "axios";
 import qs from "qs";
 import { TOKENT_STORAGE_KEY as TOKEN_STORAGE_KEY } from "config/constants";
-import User from "models/user";
 export interface IUser {
   id: string;
   email: string;
@@ -90,6 +89,4 @@ export const isLoggedIn = async (): Promise<boolean> => {
 };
 
 export const createUser = async ({ email, password }) => {
-  const { data } = await instance.post("/users", { email, password });
-  const user = User.fromAuthApiResponse(data);
 };

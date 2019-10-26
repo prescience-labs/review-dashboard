@@ -26,7 +26,6 @@ import AuthFooter from "components/Footers/AuthFooter.jsx";
 
 import Login from "views/auth/Login";
 import Register from "views/auth/Register";
-import AuthCallback from "views/auth/Callback";
 
 class Auth extends React.Component {
   componentDidMount() {

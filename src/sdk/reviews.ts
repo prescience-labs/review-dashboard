@@ -12,7 +12,16 @@ export interface Sentiment {
   confidence: string;
 }
 export interface SentimentAnalysis extends Sentiment {
-  sentence_list?: Array<Sentence>;
+  events?: Array<SentimentEvent>;
+}
+
+export interface SentimentEvent {
+  end: string;
+  start: string;
+  term: string;
+  type: string;
+  variant: string;
+  polarity: number;
 }
 export interface Sentence extends PositionalText, Sentiment {
   segment_list?: Array<Segment>;
@@ -29,7 +38,7 @@ export interface SentimentedConcept extends PositionalText, Sentiment {
 }
 
 const instance = axios.create({
-  baseURL: config.baseUrl,
+  baseURL: config.baseUrl
 });
 
 instance.interceptors.request.use(
@@ -96,19 +105,26 @@ export interface IReview {
   updated_at: string;
   vendor: string;
 }
-export const getReviews = async (
+
+export interface IApiResponse<T> {
+  results: T;
+  count: number;
+  previous: string | null;
+  next: string | null;
+}
+export const getReviews = async ({
   limit = 500,
   offset = 0,
   searchText = undefined,
   before = undefined,
   after = undefined
-): Promise<IReview[]> => {
+}): Promise<IApiResponse<IReview[]>> => {
   let requestUrl = `${config.resources.reviews.path}?limit=${limit}&offset=${offset}`;
   requestUrl += searchText ? `&text=${searchText}` : "";
   requestUrl += before ? `&before=${before}` : "";
   requestUrl += after ? `&after=${after}` : "";
   const { data } = await instance.get(requestUrl);
-  return data.results;
+  return data;
 };
 
 /**

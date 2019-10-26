@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import { IUser, login, logout } from "sdk/user";
 import { Route, RouteComponentProps } from "react-router";
 
@@ -12,7 +12,7 @@ interface IUserContextProps {
   children: any;
 }
 export default function UserContextWrapper(props: IUserContextProps) {
-  const [user, setUser] = useState<IUser>(null);
+  const [user] = useState<IUser>(null);
   const _login = (props: RouteComponentProps) => async ({
     email,
     password
