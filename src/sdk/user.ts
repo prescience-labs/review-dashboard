@@ -24,6 +24,14 @@ const userConfig = {
 const instance = axios.create({
   baseURL: userConfig.baseUrl
 });
+
+instance.interceptors.request.use(config => ({
+  ...config,
+  headers: {
+    ...config.headers,
+    Authorization: `Bearer ${getToken()}`
+  }
+}));
 interface ILoginParameters {
   email: string;
   password: string;
@@ -73,7 +81,7 @@ const isTokenValid = async (token: string): Promise<boolean> => {
 export const isLoggedIn = async (): Promise<boolean> => {
   const token = localStorage.getItem(TOKEN_STORAGE_KEY);
   if (!token) {
-    return null;
+    return false;
   } else {
     if (await isTokenValid(token)) {
       return true;
@@ -88,5 +96,4 @@ export const isLoggedIn = async (): Promise<boolean> => {
   return false;
 };
 
-export const createUser = async ({ email, password }) => {
-};
+export const createUser = async ({ email, password }) => {};

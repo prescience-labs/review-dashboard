@@ -34,13 +34,20 @@ import Campaigns from "views/admin/Campaigns";
 import Insights from "views/admin/Insights";
 import { ReviewProvider } from "state/reviews";
 import { ReviewSdk } from "sdk";
+import { isLoggedIn } from "sdk/user";
 
 const REVIEWS_TO_FETCH = 500;
 
 class Admin extends React.Component {
   state = {
-    reviews: undefined
+    reviews: undefined,
+    isLoggedIn: null
   };
+  componentDidMount() {
+    isLoggedIn()
+      .then(loggedIn => this.setState({ isLoggedIn: loggedIn }))
+      // .catch(() => this.setState({ isLoggedIn: false }));
+  }
   componentDidUpdate(e) {
     if (!document) return;
     document.documentElement.scrollTop = 0;
@@ -63,6 +70,11 @@ class Admin extends React.Component {
     });
   };
   render() {
+    console.log(this.state.isLoggedIn);
+    if (!this.state.isLoggedIn && typeof this.state.isLoggedIn === "boolean") {
+      window.location.href = "https://dataintel.ai";
+      return null;
+    }
     return (
       <>
         <Sidebar
@@ -88,11 +100,11 @@ class Admin extends React.Component {
               <Route path="/admin/dashboard" component={Index} />
               <Route path="/admin/icons" component={Icons} />
               <Route path="/admin/maps" component={Maps} />
-              <Route path="/admin/user-profile" component={Profile} />
-              <Route path="/admin/insights" component={Insights} />
+              {/* <Route path="/admin/user-profile" component={Profile} /> */}
+              {/* <Route path="/admin/insights" component={Insights} /> */}
               <Route path="/admin/reviews" component={Reviews} />
               <Route path="/admin/tables" component={Tables} />
-              <Route path="/admin/campaigns" component={Campaigns} />
+              {/* <Route path="/admin/campaigns" component={Campaigns} /> */}
               <Route
                 path=""
                 component={() => <Redirect to="/admin/dashboard" />}

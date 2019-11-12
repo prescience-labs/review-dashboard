@@ -22,20 +22,20 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary"
   },
-  {
-    path: "/admin/insights",
-    name: "Insights",
-    icon: "ni ni-bulb-61 text-yellow"
-  },
+  // {
+  //   path: "/admin/insights",
+  //   name: "Insights",
+  //   icon: "ni ni-bulb-61 text-yellow"
+  // },
   {
     path: "/admin/reviews",
     name: "Reviews",
     icon: "ni ni-bullet-list-67 text-red"
   },
-  {
-    path: "/admin/campaigns",
-    name: "Campaigns",
-    icon: "ni ni-email-83 text-blue"
-  }
+  // {
+  //   path: "/admin/campaigns",
+  //   name: "Campaigns",
+  //   icon: "ni ni-email-83 text-blue"
+  // }
 ];
 export default routes;

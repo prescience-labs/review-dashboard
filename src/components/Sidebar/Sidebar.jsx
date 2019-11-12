@@ -191,16 +191,16 @@ class Sidebar extends React.Component {
             {/* Divider */}
             <hr className="my-3" />
             {/* Heading */}
-            <h6 className="navbar-heading text-muted">Settings</h6>
+            {/* <h6 className="navbar-heading text-muted">Settings</h6> */}
             {/* Navigation */}
             <Nav className="mb-md-3" navbar>
-              <SidebarItem
+              {/* <SidebarItem
                 tag={Link}
                 path="/admin/user-profile"
                 icon="ni ni-single-02"
                 name="User Profile"
-              />
-              <SidebarItem
+              /> */}
+              {/* <SidebarItem
                 tag={Link}
                 path="/admin/data-management"
                 icon={"ni ni-spaceship"}
@@ -211,7 +211,7 @@ class Sidebar extends React.Component {
                 path="/admin/user-profile"
                 icon={"ni ni-key-25"}
                 name="Log Out"
-              />
+              /> */}
             </Nav>
           </Collapse>
         </Container>
